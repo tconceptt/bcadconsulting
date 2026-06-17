@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
+import { PaymentModal } from "./PaymentModal";
 import {
   submitRegistration,
   type RegistrationState,
@@ -41,24 +42,49 @@ function SubmitButton() {
 
 export function RegistrationForm() {
   const [state, formAction] = useActionState(submitRegistration, initialState);
+  const [paymentOpen, setPaymentOpen] = useState(false);
   const errors = state.fieldErrors ?? {};
+
+  useEffect(() => {
+    if (state.status === "success") {
+      setPaymentOpen(true);
+    }
+  }, [state.status]);
 
   if (state.status === "success") {
     return (
-      <div className="rounded-2xl border border-[color:var(--bcad-gold-400)]/40 bg-white/5 p-8 text-white">
-        <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[color:var(--bcad-gold-500)] text-2xl text-[color:var(--bcad-navy-950)]">
-          ✓
+      <>
+        <div className="rounded-2xl border border-[color:var(--bcad-gold-400)]/40 bg-white/5 p-8 text-white">
+          <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[color:var(--bcad-gold-500)] text-2xl text-[color:var(--bcad-navy-950)]">
+            ✓
+          </div>
+          <h3 className="font-display text-2xl font-semibold">
+            You&rsquo;re on the list.
+          </h3>
+          <p className="mt-3 text-sm leading-relaxed text-white/70">
+            {state.message}
+          </p>
+          <p className="mt-4 text-sm leading-relaxed text-white/80">
+            To secure your seat, please complete the{" "}
+            <span className="font-semibold text-[color:var(--bcad-gold-400)]">
+              10,000 ETB
+            </span>{" "}
+            training fee via QR payment to Awash Bank.
+          </p>
+          <button
+            type="button"
+            onClick={() => setPaymentOpen(true)}
+            className="mt-5 inline-flex items-center gap-2 rounded-full bg-[color:var(--bcad-gold-500)] px-6 py-3 text-sm font-semibold text-[color:var(--bcad-navy-950)] transition hover:bg-[color:var(--bcad-gold-400)]"
+          >
+            Show payment QR
+            <span aria-hidden="true">→</span>
+          </button>
+          <p className="mt-6 text-xs uppercase tracking-[0.3em] text-[color:var(--bcad-gold-400)]">
+            Questions? training@bcadconsulting.com
+          </p>
         </div>
-        <h3 className="font-display text-2xl font-semibold">
-          You&rsquo;re on the list.
-        </h3>
-        <p className="mt-3 text-sm leading-relaxed text-white/70">
-          {state.message}
-        </p>
-        <p className="mt-6 text-xs uppercase tracking-[0.3em] text-[color:var(--bcad-gold-400)]">
-          Questions? training@bcadconsulting.com
-        </p>
-      </div>
+        {paymentOpen && <PaymentModal onClose={() => setPaymentOpen(false)} />}
+      </>
     );
   }
 
@@ -178,11 +204,19 @@ export function RegistrationForm() {
         </p>
       )}
 
+      <div className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm">
+        <span className="text-white/70">Training fee</span>
+        <span className="font-semibold text-[color:var(--bcad-gold-400)]">
+          10,000 ETB
+        </span>
+      </div>
+
       <SubmitButton />
 
       <p className="text-center text-xs text-white/50">
-        By registering, you agree to receive program updates from BCAD
-        Consulting. We never share your information.
+        On submit, you&rsquo;ll see a QR code to pay via any Ethiopian banking
+        app (deposit to Awash Bank). By registering, you agree to receive
+        program updates from BCAD Consulting.
       </p>
     </form>
   );

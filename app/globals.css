@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #0a0f2c;
+
+  --bcad-navy-950: #050a24;
+  --bcad-navy-900: #0a1448;
+  --bcad-navy-800: #11225f;
+  --bcad-navy-700: #1a3082;
+  --bcad-blue-500: #2a55c9;
+  --bcad-gold-400: #f1c34a;
+  --bcad-gold-500: #d8a116;
+  --bcad-red-500: #d92f2f;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-navy: var(--bcad-navy-900);
+  --color-navy-deep: var(--bcad-navy-950);
+  --color-navy-mid: var(--bcad-navy-800);
+  --color-navy-soft: var(--bcad-navy-700);
+  --color-gold: var(--bcad-gold-500);
+  --color-gold-soft: var(--bcad-gold-400);
+  --color-accent-red: var(--bcad-red-500);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
+}
+
+html,
+body {
+  overflow-x: clip;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}

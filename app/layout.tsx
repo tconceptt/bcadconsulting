@@ -19,9 +19,20 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "BCAD Consulting — Building Purpose-Driven Businesses",
+  metadataBase: new URL("https://www.bcadconsulting.com"),
+  title: {
+    default: "BCaD Consulting Management PLC — Spurring Innovation & Entrepreneurship",
+    template: "%s | BCaD Consulting",
+  },
   description:
-    "BCAD Consulting equips aspiring entrepreneurs with the strategy, planning, and management skills to build purpose-driven businesses.",
+    "Management consulting, entrepreneurship training, HR outsourcing, and renewable energy solutions from Addis Ababa — helping Ethiopian and African enterprises grow since 1998.",
+  openGraph: {
+    type: "website",
+    siteName: "BCaD Consulting",
+    title: "BCaD Consulting Management PLC",
+    description:
+      "Management consulting, entrepreneurship training, HR outsourcing, and renewable energy solutions — helping enterprises grow since 1998.",
+  },
 };
 
 export default function RootLayout({
@@ -34,9 +45,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[color:var(--bcad-navy-950)]">
-        {children}
-      </body>
+      <body className="flex min-h-full flex-col bg-white">{children}</body>
     </html>
   );
 }

@@ -63,7 +63,7 @@ export async function submitRegistration(
     };
   }
 
-  console.log("[BCAD registration]", {
+  console.log("[BCaD registration]", {
     receivedAt: new Date().toISOString(),
     ...values,
   });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { PaymentModal } from "./PaymentModal";
 import {
@@ -14,13 +14,13 @@ const initialState: RegistrationState = {
 };
 
 const inputBase =
-  "w-full rounded-xl border bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 transition focus:outline-none focus:ring-2 focus:ring-[color:var(--bcad-gold-400)]/60";
+  "w-full rounded-xl border bg-white px-4 py-3 text-sm text-[color:var(--foreground)] placeholder:text-[color:var(--bcad-ink-600)]/60 transition focus:outline-none focus:ring-2 focus:ring-[color:var(--bcad-gold-500)]/50";
 
 function fieldClass(hasError: boolean | undefined) {
   return `${inputBase} ${
     hasError
       ? "border-[color:var(--bcad-red-500)]/70 focus:border-[color:var(--bcad-red-500)]"
-      : "border-white/10 focus:border-[color:var(--bcad-gold-400)]"
+      : "border-[color:var(--bcad-line-200)] focus:border-[color:var(--bcad-gold-500)]"
   }`;
 }
 
@@ -30,60 +30,54 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[color:var(--bcad-gold-500)] px-8 py-4 text-base font-semibold text-[color:var(--bcad-navy-950)] shadow-lg shadow-black/30 transition hover:bg-[color:var(--bcad-gold-400)] disabled:cursor-not-allowed disabled:opacity-70"
+      className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[color:var(--bcad-gold-500)] px-8 py-4 text-base font-semibold text-[color:var(--bcad-navy-950)] transition hover:bg-[color:var(--bcad-gold-400)] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
     >
       {pending ? "Submitting…" : "Reserve my seat"}
-      <span aria-hidden="true" className="transition group-hover:translate-x-1">
-        →
-      </span>
     </button>
   );
 }
 
 export function RegistrationForm() {
   const [state, formAction] = useActionState(submitRegistration, initialState);
-  const [paymentOpen, setPaymentOpen] = useState(false);
+  const [paymentDismissed, setPaymentDismissed] = useState(false);
   const errors = state.fieldErrors ?? {};
-
-  useEffect(() => {
-    if (state.status === "success") {
-      setPaymentOpen(true);
-    }
-  }, [state.status]);
+  const paymentOpen = state.status === "success" && !paymentDismissed;
 
   if (state.status === "success") {
     return (
       <>
-        <div className="rounded-2xl border border-[color:var(--bcad-gold-400)]/40 bg-white/5 p-8 text-white">
-          <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[color:var(--bcad-gold-500)] text-2xl text-[color:var(--bcad-navy-950)]">
-            ✓
-          </div>
-          <h3 className="font-display text-2xl font-semibold">
+        <div className="rounded-2xl border border-[color:var(--bcad-line-200)] bg-[color:var(--bcad-mist-50)] p-8">
+          <h3 className="font-display text-2xl font-semibold text-[color:var(--foreground)]">
             You&rsquo;re on the list.
           </h3>
-          <p className="mt-3 text-sm leading-relaxed text-white/70">
+          <p className="mt-3 text-sm leading-relaxed text-[color:var(--bcad-ink-600)]">
             {state.message}
           </p>
-          <p className="mt-4 text-sm leading-relaxed text-white/80">
+          <p className="mt-4 text-sm leading-relaxed text-[color:var(--bcad-ink-700)]">
             To secure your seat, please complete the{" "}
-            <span className="font-semibold text-[color:var(--bcad-gold-400)]">
-              10,000 ETB
-            </span>{" "}
-            training fee via QR payment to Awash Bank.
+            <span className="font-semibold">20,000 ETB</span> training fee via
+            QR payment.
           </p>
           <button
             type="button"
-            onClick={() => setPaymentOpen(true)}
-            className="mt-5 inline-flex items-center gap-2 rounded-full bg-[color:var(--bcad-gold-500)] px-6 py-3 text-sm font-semibold text-[color:var(--bcad-navy-950)] transition hover:bg-[color:var(--bcad-gold-400)]"
+            onClick={() => setPaymentDismissed(false)}
+            className="mt-5 inline-flex items-center rounded-full bg-[color:var(--bcad-gold-500)] px-6 py-3 text-sm font-semibold text-[color:var(--bcad-navy-950)] transition hover:bg-[color:var(--bcad-gold-400)]"
           >
             Show payment QR
-            <span aria-hidden="true">→</span>
           </button>
-          <p className="mt-6 text-xs uppercase tracking-[0.3em] text-[color:var(--bcad-gold-400)]">
-            Questions? training@bcadconsulting.com
+          <p className="mt-6 text-sm text-[color:var(--bcad-ink-600)]">
+            Questions?{" "}
+            <a
+              href="mailto:training@bcadconsulting.com"
+              className="font-medium text-[color:var(--bcad-navy-700)] hover:underline"
+            >
+              training@bcadconsulting.com
+            </a>
           </p>
         </div>
-        {paymentOpen && <PaymentModal onClose={() => setPaymentOpen(false)} />}
+        {paymentOpen && (
+          <PaymentModal onClose={() => setPaymentDismissed(true)} />
+        )}
       </>
     );
   }
@@ -96,7 +90,7 @@ export function RegistrationForm() {
           name="fullName"
           required
           error={errors.fullName}
-          placeholder="Selamawit Tesfaye"
+          autoComplete="name"
         />
         <Field
           label="Email"
@@ -104,7 +98,7 @@ export function RegistrationForm() {
           type="email"
           required
           error={errors.email}
-          placeholder="selamawit@example.com"
+          autoComplete="email"
         />
         <Field
           label="Phone"
@@ -112,6 +106,7 @@ export function RegistrationForm() {
           type="tel"
           required
           error={errors.phone}
+          autoComplete="tel"
           placeholder="+251 9XX XXX XXX"
         />
         <Field
@@ -170,31 +165,37 @@ export function RegistrationForm() {
       </div>
 
       <fieldset>
-        <legend className="mb-2 block text-sm font-medium text-white/80">
-          Preferred session <span className="text-[color:var(--bcad-gold-400)]">*</span>
+        <legend className="mb-2 block text-sm font-medium text-[color:var(--bcad-ink-700)]">
+          Preferred session{" "}
+          <span className="text-[color:var(--bcad-gold-700)]">*</span>
         </legend>
         <div className="grid gap-3 sm:grid-cols-2">
           <SessionOption
-            value="in-person-evening"
-            title="In-person — Evenings"
-            subtitle="Nuna, Ethiopia · Mon/Wed/Fri"
+            value="morning"
+            title="Morning"
+            subtitle="8:30 – 12:00"
           />
           <SessionOption
-            value="in-person-weekend"
-            title="In-person — Weekends"
-            subtitle="Nuna, Ethiopia · Sat full-day"
+            value="afternoon"
+            title="Afternoon"
+            subtitle="1:30 – 5:00 pm"
           />
           <SessionOption
-            value="virtual-evening"
-            title="Virtual — Evenings"
-            subtitle="Live online · Tue/Thu"
+            value="evening"
+            title="Evening"
+            subtitle="6:00 – 8:00 pm"
           />
           <SessionOption
-            value="undecided"
-            title="Not sure yet"
-            subtitle="Help me choose what fits"
+            value="flexible"
+            title="I'm flexible"
+            subtitle="Help me choose a session"
           />
         </div>
+        <p className="mt-2 text-xs leading-relaxed text-[color:var(--bcad-ink-600)]">
+          The evening session runs only if enough applicants choose it. If it
+          can&rsquo;t be scheduled, we&rsquo;ll help you move to a morning or
+          afternoon slot.
+        </p>
         {errors.session && <ErrorText>{errors.session}</ErrorText>}
       </fieldset>
 
@@ -204,19 +205,20 @@ export function RegistrationForm() {
         </p>
       )}
 
-      <div className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm">
-        <span className="text-white/70">Training fee</span>
-        <span className="font-semibold text-[color:var(--bcad-gold-400)]">
-          10,000 ETB
-        </span>
+      <div className="flex flex-col gap-4 border-t border-[color:var(--bcad-line-200)] pt-5 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm text-[color:var(--bcad-ink-600)]">
+          Training fee:{" "}
+          <span className="font-semibold text-[color:var(--foreground)]">
+            20,000 ETB
+          </span>
+          , paid by QR after you submit.
+        </p>
+        <SubmitButton />
       </div>
 
-      <SubmitButton />
-
-      <p className="text-center text-xs text-white/50">
-        On submit, you&rsquo;ll see a QR code to pay via any Ethiopian banking
-        app (deposit to Awash Bank). By registering, you agree to receive
-        program updates from BCAD Consulting.
+      <p className="text-xs leading-relaxed text-[color:var(--bcad-ink-600)]">
+        By registering, you agree to receive program updates from BCaD
+        Consulting.
       </p>
     </form>
   );
@@ -234,11 +236,11 @@ function Label({
   return (
     <label
       htmlFor={htmlFor}
-      className="mb-2 block text-sm font-medium text-white/80"
+      className="mb-2 block text-sm font-medium text-[color:var(--bcad-ink-700)]"
     >
       {children}
       {required && (
-        <span className="ml-1 text-[color:var(--bcad-gold-400)]">*</span>
+        <span className="ml-1 text-[color:var(--bcad-gold-700)]">*</span>
       )}
     </label>
   );
@@ -257,6 +259,7 @@ function Field({
   required,
   error,
   placeholder,
+  autoComplete,
 }: {
   label: string;
   name: string;
@@ -264,6 +267,7 @@ function Field({
   required?: boolean;
   error?: string;
   placeholder?: string;
+  autoComplete?: string;
 }) {
   return (
     <div>
@@ -275,6 +279,7 @@ function Field({
         name={name}
         type={type}
         placeholder={placeholder}
+        autoComplete={autoComplete}
         className={fieldClass(!!error)}
       />
       {error && <ErrorText>{error}</ErrorText>}
@@ -292,16 +297,20 @@ function SessionOption({
   subtitle: string;
 }) {
   return (
-    <label className="group relative flex cursor-pointer items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-4 transition hover:border-[color:var(--bcad-gold-400)]/60 has-[:checked]:border-[color:var(--bcad-gold-400)] has-[:checked]:bg-[color:var(--bcad-gold-400)]/10">
+    <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[color:var(--bcad-line-200)] bg-white p-4 transition hover:border-[color:var(--bcad-gold-500)]/60 has-[:checked]:border-[color:var(--bcad-gold-500)] has-[:checked]:bg-[color:var(--bcad-mist-50)]">
       <input
         type="radio"
         name="session"
         value={value}
-        className="mt-1 h-4 w-4 accent-[color:var(--bcad-gold-500)]"
+        className="mt-1 h-4 w-4 accent-[color:var(--bcad-gold-700)]"
       />
       <span className="flex flex-col">
-        <span className="text-sm font-semibold text-white">{title}</span>
-        <span className="text-xs text-white/60">{subtitle}</span>
+        <span className="text-sm font-semibold text-[color:var(--foreground)]">
+          {title}
+        </span>
+        <span className="text-xs text-[color:var(--bcad-ink-600)]">
+          {subtitle}
+        </span>
       </span>
     </label>
   );

@@ -51,6 +51,15 @@ const options = [
       "Asymmetric split-screen in electric blue, verb-led sections ('Start something. Fix something. Run something.'). The youngest, most digital voice.",
     swatches: ["#ffffff", "#2a55c9", "#0c1022"],
   },
+  {
+    n: 6,
+    href: "/options/keystone",
+    name: "Keystone",
+    lane: "On-brand",
+    thesis:
+      "The brand manual as a flagship. Navy-drenched, Montserrat-led, with the key drawn in line art and built from the page itself — a photograph for its bow, a gold bar for its shaft. Teal carries the training chapter; the tone is institutional weight with an entrepreneurial pulse.",
+    swatches: ["#0f2c4c", "#1fa7a0", "#daa857"],
+  },
 ];
 
 export default function OptionsPage() {
@@ -64,13 +73,14 @@ export default function OptionsPage() {
           BCaD Consulting · homepage design study
         </p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-          Five directions. Pick one.
+          Six directions. Pick one.
         </h1>
         <p className="mt-4 max-w-2xl leading-relaxed text-[#444]">
           Each option is a complete homepage built with real BCaD content —
-          same substance, five different postures. Options 1–3 aim squarely at
-          the polished-consulting register; 4 and 5 take more risk. All links
-          inside each option lead to the real site pages.
+          same substance, six different postures. Options 1–3 aim squarely at
+          the polished-consulting register; 4 and 5 take more risk; 6 follows
+          the official brand standards to the letter. All links inside each
+          option lead to the real site pages.
         </p>
 
         <ol className="mt-12">

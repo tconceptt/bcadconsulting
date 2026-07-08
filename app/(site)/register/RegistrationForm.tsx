@@ -14,13 +14,13 @@ const initialState: RegistrationState = {
 };
 
 const inputBase =
-  "w-full rounded-xl border bg-white px-4 py-3 text-sm text-[color:var(--foreground)] placeholder:text-[color:var(--bcad-ink-600)]/60 transition focus:outline-none focus:ring-2 focus:ring-[color:var(--bcad-gold-500)]/50";
+  "w-full rounded-[4px] border bg-white px-4 py-3 text-sm text-[color:var(--ks-navy)] placeholder:text-[color:var(--ks-ink)]/60 transition focus:outline-none focus:ring-2 focus:ring-[color:var(--ks-blue)]/30";
 
 function fieldClass(hasError: boolean | undefined) {
   return `${inputBase} ${
     hasError
-      ? "border-[color:var(--bcad-red-500)]/70 focus:border-[color:var(--bcad-red-500)]"
-      : "border-[color:var(--bcad-line-200)] focus:border-[color:var(--bcad-gold-500)]"
+      ? "border-[color:var(--ks-red)]/70 focus:border-[color:var(--ks-red)]"
+      : "border-[color:var(--ks-line)] focus:border-[color:var(--ks-blue)]"
   }`;
 }
 
@@ -30,7 +30,8 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[color:var(--bcad-gold-500)] px-8 py-4 text-base font-semibold text-[color:var(--bcad-navy-950)] transition hover:bg-[color:var(--bcad-gold-400)] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
+      className="ks-btn inline-flex w-full items-center justify-center gap-2 px-8 py-4 font-display text-base font-semibold text-[color:var(--ks-navy)] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
+      style={{ backgroundColor: "var(--ks-gold)" }}
     >
       {pending ? "Submitting…" : "Reserve my seat"}
     </button>
@@ -46,14 +47,17 @@ export function RegistrationForm() {
   if (state.status === "success") {
     return (
       <>
-        <div className="rounded-2xl border border-[color:var(--bcad-line-200)] bg-[color:var(--bcad-mist-50)] p-8">
-          <h3 className="font-display text-2xl font-semibold text-[color:var(--foreground)]">
+        <div
+          className="border border-[color:var(--ks-line)] bg-white p-8"
+          style={{ borderTop: "3px solid var(--ks-gold)" }}
+        >
+          <h3 className="font-display text-2xl font-bold text-[color:var(--ks-navy)]">
             You&rsquo;re on the list.
           </h3>
-          <p className="mt-3 text-sm leading-relaxed text-[color:var(--bcad-ink-600)]">
+          <p className="mt-3 text-sm leading-relaxed text-[color:var(--ks-ink)]">
             {state.message}
           </p>
-          <p className="mt-4 text-sm leading-relaxed text-[color:var(--bcad-ink-700)]">
+          <p className="mt-4 text-sm leading-relaxed text-[color:var(--ks-navy)]">
             To secure your seat, please complete the{" "}
             <span className="font-semibold">20,000 ETB</span> training fee via
             QR payment.
@@ -61,15 +65,16 @@ export function RegistrationForm() {
           <button
             type="button"
             onClick={() => setPaymentDismissed(false)}
-            className="mt-5 inline-flex items-center rounded-full bg-[color:var(--bcad-gold-500)] px-6 py-3 text-sm font-semibold text-[color:var(--bcad-navy-950)] transition hover:bg-[color:var(--bcad-gold-400)]"
+            className="ks-btn mt-5 inline-flex items-center px-6 py-3 font-display text-sm font-semibold text-[color:var(--ks-navy)]"
+            style={{ backgroundColor: "var(--ks-gold)" }}
           >
             Show payment QR
           </button>
-          <p className="mt-6 text-sm text-[color:var(--bcad-ink-600)]">
+          <p className="mt-6 text-sm text-[color:var(--ks-ink)]">
             Questions?{" "}
             <a
               href="mailto:training@bcadconsulting.com"
-              className="font-medium text-[color:var(--bcad-navy-700)] hover:underline"
+              className="font-medium text-[color:var(--ks-blue)] hover:underline"
             >
               training@bcadconsulting.com
             </a>
@@ -165,9 +170,9 @@ export function RegistrationForm() {
       </div>
 
       <fieldset>
-        <legend className="mb-2 block text-sm font-medium text-[color:var(--bcad-ink-700)]">
+        <legend className="mb-2 block text-sm font-medium text-[color:var(--ks-navy)]">
           Preferred session{" "}
-          <span className="text-[color:var(--bcad-gold-700)]">*</span>
+          <span className="text-[color:var(--ks-gold-deep)]">*</span>
         </legend>
         <div className="grid gap-3 sm:grid-cols-2">
           <SessionOption
@@ -191,7 +196,7 @@ export function RegistrationForm() {
             subtitle="Help me choose a session"
           />
         </div>
-        <p className="mt-2 text-xs leading-relaxed text-[color:var(--bcad-ink-600)]">
+        <p className="mt-2 text-xs leading-relaxed text-[color:var(--ks-ink)]">
           The evening session runs only if enough applicants choose it. If it
           can&rsquo;t be scheduled, we&rsquo;ll help you move to a morning or
           afternoon slot.
@@ -200,15 +205,15 @@ export function RegistrationForm() {
       </fieldset>
 
       {state.status === "error" && (
-        <p className="rounded-lg border border-[color:var(--bcad-red-500)]/40 bg-[color:var(--bcad-red-500)]/10 px-4 py-3 text-sm text-[color:var(--bcad-red-500)]">
+        <p className="rounded-[4px] border border-[color:var(--ks-red)]/40 bg-[color:var(--ks-red)]/10 px-4 py-3 text-sm text-[color:var(--ks-red)]">
           {state.message}
         </p>
       )}
 
-      <div className="flex flex-col gap-4 border-t border-[color:var(--bcad-line-200)] pt-5 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-[color:var(--bcad-ink-600)]">
+      <div className="flex flex-col gap-4 border-t border-[color:var(--ks-line)] pt-5 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm text-[color:var(--ks-ink)]">
           Training fee:{" "}
-          <span className="font-semibold text-[color:var(--foreground)]">
+          <span className="font-semibold text-[color:var(--ks-navy)]">
             20,000 ETB
           </span>
           , paid by QR after you submit.
@@ -216,7 +221,7 @@ export function RegistrationForm() {
         <SubmitButton />
       </div>
 
-      <p className="text-xs leading-relaxed text-[color:var(--bcad-ink-600)]">
+      <p className="text-xs leading-relaxed text-[color:var(--ks-ink)]">
         By registering, you agree to receive program updates from BCaD
         Consulting.
       </p>
@@ -236,11 +241,11 @@ function Label({
   return (
     <label
       htmlFor={htmlFor}
-      className="mb-2 block text-sm font-medium text-[color:var(--bcad-ink-700)]"
+      className="mb-2 block text-sm font-medium text-[color:var(--ks-navy)]"
     >
       {children}
       {required && (
-        <span className="ml-1 text-[color:var(--bcad-gold-700)]">*</span>
+        <span className="ml-1 text-[color:var(--ks-gold-deep)]">*</span>
       )}
     </label>
   );
@@ -248,7 +253,7 @@ function Label({
 
 function ErrorText({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mt-1.5 text-xs text-[color:var(--bcad-red-500)]">{children}</p>
+    <p className="mt-1.5 text-xs text-[color:var(--ks-red)]">{children}</p>
   );
 }
 
@@ -297,18 +302,18 @@ function SessionOption({
   subtitle: string;
 }) {
   return (
-    <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[color:var(--bcad-line-200)] bg-white p-4 transition hover:border-[color:var(--bcad-gold-500)]/60 has-[:checked]:border-[color:var(--bcad-gold-500)] has-[:checked]:bg-[color:var(--bcad-mist-50)]">
+    <label className="flex cursor-pointer items-start gap-3 rounded-[4px] border border-[color:var(--ks-line)] bg-white p-4 transition hover:border-[color:var(--ks-blue)]/60 has-[:checked]:border-[color:var(--ks-blue)] has-[:checked]:bg-[color:var(--ks-soft)]">
       <input
         type="radio"
         name="session"
         value={value}
-        className="mt-1 h-4 w-4 accent-[color:var(--bcad-gold-700)]"
+        className="mt-1 h-4 w-4 accent-[color:var(--ks-blue)]"
       />
       <span className="flex flex-col">
-        <span className="text-sm font-semibold text-[color:var(--foreground)]">
+        <span className="text-sm font-semibold text-[color:var(--ks-navy)]">
           {title}
         </span>
-        <span className="text-xs text-[color:var(--bcad-ink-600)]">
+        <span className="text-xs text-[color:var(--ks-ink)]">
           {subtitle}
         </span>
       </span>

@@ -10,13 +10,13 @@ const initialState: ContactState = {
 };
 
 const inputBase =
-  "w-full rounded-xl border bg-white px-4 py-3 text-sm text-[color:var(--foreground)] placeholder:text-[color:var(--bcad-ink-600)]/70 transition focus:outline-none focus:ring-2 focus:ring-[color:var(--bcad-gold-500)]/50";
+  "w-full rounded-[4px] border bg-white px-4 py-3 text-sm text-[color:var(--ks-navy)] placeholder:text-[color:var(--ks-ink)]/60 transition focus:outline-none focus:ring-2 focus:ring-[color:var(--ks-blue)]/30";
 
 function fieldClass(hasError: boolean) {
   return `${inputBase} ${
     hasError
-      ? "border-[color:var(--bcad-red-500)]/70 focus:border-[color:var(--bcad-red-500)]"
-      : "border-[color:var(--bcad-line-200)] focus:border-[color:var(--bcad-gold-500)]"
+      ? "border-[color:var(--ks-red)]/70 focus:border-[color:var(--ks-red)]"
+      : "border-[color:var(--ks-line)] focus:border-[color:var(--ks-blue)]"
   }`;
 }
 
@@ -26,7 +26,8 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex items-center justify-center gap-2 rounded-full bg-[color:var(--bcad-navy-900)] px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-[color:var(--bcad-navy-800)] disabled:cursor-not-allowed disabled:opacity-70"
+      className="ks-btn inline-flex items-center justify-center gap-2 px-8 py-3.5 font-display text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
+      style={{ backgroundColor: "var(--ks-blue)" }}
     >
       {pending ? "Sending…" : "Send message"}
     </button>
@@ -39,11 +40,14 @@ export function ContactForm() {
 
   if (state.status === "success") {
     return (
-      <div className="rounded-2xl border border-[color:var(--bcad-line-200)] bg-[color:var(--bcad-mist-50)] p-8">
-        <h3 className="font-display text-2xl font-semibold text-[color:var(--foreground)]">
+      <div
+        className="border border-[color:var(--ks-line)] bg-white p-8"
+        style={{ borderTop: "3px solid var(--ks-gold)" }}
+      >
+        <h3 className="font-display text-2xl font-bold text-[color:var(--ks-navy)]">
           Message received.
         </h3>
-        <p className="mt-3 text-sm leading-relaxed text-[color:var(--bcad-ink-600)]">
+        <p className="mt-3 text-sm leading-relaxed text-[color:var(--ks-ink)]">
           {state.message}
         </p>
       </div>
@@ -120,7 +124,7 @@ export function ContactForm() {
       </div>
 
       {state.status === "error" && (
-        <p className="rounded-lg border border-[color:var(--bcad-red-500)]/40 bg-[color:var(--bcad-red-500)]/10 px-4 py-3 text-sm text-[color:var(--bcad-red-500)]">
+        <p className="rounded-[4px] border border-[color:var(--ks-red)]/40 bg-[color:var(--ks-red)]/10 px-4 py-3 text-sm text-[color:var(--ks-red)]">
           {state.message}
         </p>
       )}
@@ -142,11 +146,11 @@ function Label({
   return (
     <label
       htmlFor={htmlFor}
-      className="mb-2 block text-sm font-medium text-[color:var(--bcad-ink-700)]"
+      className="mb-2 block text-sm font-medium text-[color:var(--ks-navy)]"
     >
       {children}
       {required && (
-        <span className="ml-1 text-[color:var(--bcad-gold-700)]">*</span>
+        <span className="ml-1 text-[color:var(--ks-gold-deep)]">*</span>
       )}
     </label>
   );
@@ -154,6 +158,6 @@ function Label({
 
 function ErrorText({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mt-1.5 text-xs text-[color:var(--bcad-red-500)]">{children}</p>
+    <p className="mt-1.5 text-xs text-[color:var(--ks-red)]">{children}</p>
   );
 }

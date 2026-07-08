@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 const practices = [
   {
     id: "consulting",
+    n: "01",
     short: "Management Consulting",
     name: "Management Consulting & Business Development",
     since: "Since 1998",
@@ -29,6 +30,7 @@ const practices = [
   },
   {
     id: "bpo",
+    n: "02",
     short: "BPO & HR Services",
     name: "Business Process Outsourcing & HR Services",
     since: "Established practice",
@@ -45,6 +47,7 @@ const practices = [
   },
   {
     id: "solar",
+    n: "03",
     short: "Renewable Energy",
     name: "Renewable Energy — Ketir Solar",
     since: "Since 2018",
@@ -61,6 +64,7 @@ const practices = [
   },
   {
     id: "dietetics",
+    n: "04",
     short: "Dietetic Counselling",
     name: "Dietetic & Nutritional Counselling — Bekidmia",
     since: "Since 2022",
@@ -92,12 +96,21 @@ const sectors = [
 export default function ServicesPage() {
   return (
     <main>
-      <section className="bg-[color:var(--bcad-navy-950)] text-white">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
-          <h1 className="max-w-3xl font-display text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-            Four practices, one purpose: enterprises that work.
+      <section
+        className="text-white"
+        style={{
+          background:
+            "radial-gradient(ellipse 120% 90% at 20% 0%, var(--ks-navy-glow) 0%, var(--ks-navy) 55%)",
+        }}
+      >
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+          <h1 className="max-w-3xl font-display text-[clamp(2.2rem,5vw,3.6rem)] font-bold leading-tight tracking-[-0.02em]">
+            Four practices, one standard:{" "}
+            <span className="text-[color:var(--ks-gold)]">
+              enterprises that work.
+            </span>
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/75">
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/80">
             We started in management consulting and grew where our clients
             needed us — into HR outsourcing, solar energy, and nutrition. Every
             practice serves the same goal: businesses that create income and
@@ -108,7 +121,7 @@ export default function ServicesPage() {
               <a
                 key={p.id}
                 href={`#${p.id}`}
-                className="rounded-full border border-white/20 px-4 py-2 text-sm text-white/85 transition hover:border-[color:var(--bcad-gold-400)] hover:text-white"
+                className="border border-white/25 px-4 py-2 text-sm text-white/85 transition hover:border-[color:var(--ks-gold)] hover:text-white"
               >
                 {p.short}
               </a>
@@ -123,38 +136,43 @@ export default function ServicesPage() {
             key={p.id}
             id={p.id}
             className={`scroll-mt-24 py-16 sm:py-20 ${
-              i > 0 ? "border-t border-[color:var(--bcad-line-200)]" : ""
+              i > 0 ? "border-t border-[color:var(--ks-line)]" : ""
             }`}
           >
-            <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
+            <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
+              <span className="font-display text-5xl font-bold text-[color:var(--ks-navy)]/15">
+                {p.n}
+              </span>
+              <h2 className="font-display text-3xl font-bold text-[color:var(--ks-navy)]">
+                {p.name}
+              </h2>
+            </div>
+            <p className="mt-2 text-sm font-semibold text-[color:var(--ks-gold-deep)]">
+              {p.since}
+            </p>
+            <div className="mt-8 grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
               <div>
-                <p className="text-sm font-medium text-[color:var(--bcad-gold-700)]">
-                  {p.since}
-                </p>
-                <h2 className="mt-2 max-w-xl font-display text-3xl font-semibold leading-snug text-[color:var(--foreground)]">
-                  {p.name}
-                </h2>
-                <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[color:var(--bcad-ink-700)]">
+                <p className="max-w-2xl text-lg leading-[1.75] text-[color:var(--ks-ink)]">
                   {p.intro}
                 </p>
-                <p className="mt-4 max-w-2xl leading-relaxed text-[color:var(--bcad-ink-600)]">
+                <p className="mt-4 max-w-2xl leading-[1.75] text-[color:var(--ks-ink)]">
                   {p.detail}
                 </p>
               </div>
-              <div className="lg:pt-12">
-                <div className="rounded-2xl bg-[color:var(--bcad-mist-50)] p-7">
-                  <h3 className="text-sm font-semibold uppercase tracking-wide text-[color:var(--bcad-ink-700)]">
+              <div>
+                <div className="bg-[color:var(--ks-soft)] p-7">
+                  <h3 className="font-display text-sm font-semibold text-[color:var(--ks-navy)]">
                     What this covers
                   </h3>
                   <ul className="mt-4 space-y-3">
                     {p.offerings.map((o) => (
                       <li
                         key={o}
-                        className="flex gap-3 text-sm leading-relaxed text-[color:var(--bcad-ink-600)]"
+                        className="flex gap-3 text-sm leading-relaxed text-[color:var(--ks-ink)]"
                       >
                         <span
                           aria-hidden
-                          className="mt-[0.45rem] h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[color:var(--bcad-gold-500)]"
+                          className="mt-[0.45rem] h-2 w-2 flex-shrink-0 bg-[color:var(--ks-teal)]"
                         />
                         {o}
                       </li>
@@ -167,14 +185,14 @@ export default function ServicesPage() {
         ))}
       </div>
 
-      <section className="bg-[color:var(--bcad-mist-50)]">
+      <section className="bg-[color:var(--ks-soft)]">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
             <div>
-              <h2 className="font-display text-3xl font-semibold text-[color:var(--foreground)]">
+              <h2 className="font-display text-3xl font-bold text-[color:var(--ks-navy)]">
                 Where we know the ground
               </h2>
-              <p className="mt-4 leading-relaxed text-[color:var(--bcad-ink-600)]">
+              <p className="mt-4 leading-relaxed text-[color:var(--ks-ink)]">
                 Our expertise cuts across sectors, but these are the areas
                 where we&rsquo;ve done the most hands-on work.
               </p>
@@ -183,7 +201,7 @@ export default function ServicesPage() {
               {sectors.map((s) => (
                 <li
                   key={s}
-                  className="border-b border-[color:var(--bcad-line-200)] pb-3 text-[color:var(--bcad-ink-700)]"
+                  className="border-b border-[color:var(--ks-line)] pb-3 text-[color:var(--ks-navy)]"
                 >
                   {s}
                 </li>
@@ -193,11 +211,14 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-        <div className="rounded-2xl bg-[color:var(--bcad-navy-950)] px-8 py-12 text-white sm:px-12">
+      <section
+        className="text-white"
+        style={{ backgroundColor: "var(--ks-navy)" }}
+      >
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
             <div>
-              <h2 className="font-display text-2xl font-semibold sm:text-3xl">
+              <h2 className="font-display text-2xl font-bold sm:text-3xl">
                 Not sure which practice fits your problem?
               </h2>
               <p className="mt-2 max-w-xl text-white/75">
@@ -207,7 +228,8 @@ export default function ServicesPage() {
             </div>
             <Link
               href="/contact"
-              className="flex-shrink-0 rounded-full bg-[color:var(--bcad-gold-500)] px-7 py-3.5 text-sm font-semibold text-[color:var(--bcad-navy-950)] transition hover:bg-[color:var(--bcad-gold-400)]"
+              className="ks-btn flex-shrink-0 px-7 py-3.5 font-display text-sm font-semibold text-[color:var(--ks-navy)]"
+              style={{ backgroundColor: "var(--ks-gold)" }}
             >
               Contact us
             </Link>

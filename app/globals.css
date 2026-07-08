@@ -2,44 +2,36 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #0a0f2c;
+  --foreground: #0f2c4c;
 
-  --bcad-navy-950: #050a24;
-  --bcad-navy-900: #0a1448;
-  --bcad-navy-800: #11225f;
-  --bcad-navy-700: #1a3082;
-  --bcad-blue-500: #2a55c9;
-  --bcad-gold-400: #f1c34a;
-  --bcad-gold-500: #d8a116;
-  --bcad-gold-700: #8a6410;
-  --bcad-red-500: #d92f2f;
-
-  /* Light-surface ramp, tinted toward the brand navy hue */
-  --bcad-mist-50: #f6f7fb;
-  --bcad-mist-100: #eceef6;
-  --bcad-line-200: #dcdfeb;
-  --bcad-ink-600: #444b6e;
-  --bcad-ink-700: #2e3454;
+  /* Brand standards */
+  --ks-navy: #0F2C4C;        /* Deep Navy — primary dark surface */
+  --ks-navy-deep: #0A2038;   /* footer / deepest */
+  --ks-navy-glow: #16416e;   /* hero radial highlight */
+  --ks-blue: #1E5AA8;        /* Primary Blue — actions, links, emphasis on white */
+  --ks-gold: #DAA857;        /* Innovation Gold — CTAs on navy, keylines, accents on navy */
+  --ks-gold-deep: #a8791f;   /* gold that passes contrast on white (for small text on white) */
+  --ks-teal: #1FA7A0;        /* Entrepreneurship Teal — training surfaces, markers */
+  --ks-soft: #F5F6F8;        /* Soft Gray — alternate light surface */
+  --ks-ink: #3d4e66;         /* body text on white (≥4.5:1) */
+  --ks-line: rgba(15, 44, 76, 0.12);  /* hairlines on white */
+  --ks-red: #d92f2f;         /* form errors only */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-navy: var(--bcad-navy-900);
-  --color-navy-deep: var(--bcad-navy-950);
-  --color-navy-mid: var(--bcad-navy-800);
-  --color-navy-soft: var(--bcad-navy-700);
-  --color-gold: var(--bcad-gold-500);
-  --color-gold-soft: var(--bcad-gold-400);
-  --color-gold-deep: var(--bcad-gold-700);
-  --color-accent-red: var(--bcad-red-500);
-  --color-mist: var(--bcad-mist-50);
-  --color-mist-deep: var(--bcad-mist-100);
-  --color-line: var(--bcad-line-200);
-  --color-ink-muted: var(--bcad-ink-600);
-  --color-ink-soft: var(--bcad-ink-700);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-navy: var(--ks-navy);
+  --color-navy-deep: var(--ks-navy-deep);
+  --color-blue: var(--ks-blue);
+  --color-gold: var(--ks-gold);
+  --color-gold-deep: var(--ks-gold-deep);
+  --color-teal: var(--ks-teal);
+  --color-soft: var(--ks-soft);
+  --color-ink: var(--ks-ink);
+  --color-line: var(--ks-line);
+  --color-accent-red: var(--ks-red);
+  --font-sans: var(--font-sans-src);
   --font-display: var(--font-display);
 }
 
@@ -55,7 +47,7 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans-src), Arial, Helvetica, sans-serif;
   font-kerning: normal;
 }
 
@@ -70,13 +62,78 @@ p {
 }
 
 ::selection {
-  background: var(--bcad-gold-400);
-  color: var(--bcad-navy-950);
+  background: var(--ks-gold);
+  color: var(--ks-navy);
 }
 
 :focus-visible {
-  outline: 2px solid var(--bcad-gold-500);
+  outline: 2px solid var(--ks-gold);
   outline-offset: 2px;
+}
+
+@keyframes ks-rise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.ks-rise {
+  animation: ks-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.ks-rise-2 {
+  animation-delay: 0.12s;
+}
+.ks-rise-3 {
+  animation-delay: 0.24s;
+}
+.ks-rise-4 {
+  animation-delay: 0.38s;
+}
+@keyframes ks-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.ks-draw {
+  stroke-dasharray: 1;
+  animation: ks-draw 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+}
+.ks-draw-2 {
+  animation-delay: 0.55s;
+}
+.ks-draw-3 {
+  animation-delay: 0.8s;
+}
+.ks-row .ks-arrow {
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.25s, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ks-row:hover .ks-arrow,
+.ks-row:focus-visible .ks-arrow {
+  opacity: 1;
+  transform: none;
+}
+.ks-row .ks-name {
+  transition: color 0.25s;
+}
+.ks-row:hover .ks-name,
+.ks-row:focus-visible .ks-name {
+  color: var(--ks-blue);
+}
+.ks-btn {
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), filter 0.2s;
+}
+.ks-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -25,15 +25,21 @@ const weeks = [
 export default function RegisterPage() {
   return (
     <main>
-      <section className="bg-[color:var(--bcad-navy-950)] text-white">
+      <section
+        className="text-white"
+        style={{
+          background:
+            "radial-gradient(ellipse 120% 90% at 20% 0%, var(--ks-navy-glow) 0%, var(--ks-navy) 55%)",
+        }}
+      >
         <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
-          <p className="text-sm font-medium text-[color:var(--bcad-gold-400)]">
+          <p className="text-sm font-semibold text-[color:var(--ks-gold)]">
             Now enrolling — Building a Purpose-Driven Business
           </p>
-          <h1 className="mt-2 max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h1 className="mt-2 max-w-2xl font-display text-3xl font-bold tracking-[-0.02em] sm:text-4xl">
             Reserve your seat.
           </h1>
-          <p className="mt-3 max-w-2xl leading-relaxed text-white/75">
+          <p className="mt-3 max-w-2xl leading-relaxed text-white/80">
             Registration takes about five minutes. Payment is by QR through any
             Ethiopian banking app, and our team confirms your seat within 24
             hours.
@@ -46,9 +52,9 @@ export default function RegisterPage() {
           <RegistrationForm />
         </div>
 
-        <aside className="space-y-10 lg:border-l lg:border-[color:var(--bcad-line-200)] lg:pl-10">
+        <aside className="space-y-10 lg:border-l lg:border-[color:var(--ks-line)] lg:pl-10">
           <div>
-            <h2 className="font-display text-xl font-semibold text-[color:var(--foreground)]">
+            <h2 className="font-display text-xl font-bold text-[color:var(--ks-navy)]">
               The program at a glance
             </h2>
             <dl className="mt-5">
@@ -56,13 +62,13 @@ export default function RegisterPage() {
                 <div
                   key={f.label}
                   className={`flex items-baseline justify-between gap-4 py-3 ${
-                    i > 0 ? "border-t border-[color:var(--bcad-line-200)]" : ""
+                    i > 0 ? "border-t border-[color:var(--ks-line)]" : ""
                   }`}
                 >
-                  <dt className="text-sm text-[color:var(--bcad-ink-600)]">
+                  <dt className="text-sm text-[color:var(--ks-ink)]">
                     {f.label}
                   </dt>
-                  <dd className="text-right text-sm font-medium text-[color:var(--foreground)]">
+                  <dd className="text-right text-sm font-medium text-[color:var(--ks-navy)]">
                     {f.value}
                   </dd>
                 </div>
@@ -71,26 +77,26 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <h2 className="font-display text-xl font-semibold text-[color:var(--foreground)]">
+            <h2 className="font-display text-xl font-bold text-[color:var(--ks-navy)]">
               What the four weeks cover
             </h2>
             <ol className="mt-5 space-y-3">
               {weeks.map((w) => (
                 <li key={w.label} className="flex gap-4 text-sm">
-                  <span className="w-20 flex-shrink-0 font-semibold text-[color:var(--bcad-gold-700)]">
+                  <span className="w-20 flex-shrink-0 font-bold text-[color:var(--ks-gold-deep)]">
                     {w.label}
                   </span>
-                  <span className="text-[color:var(--bcad-ink-700)]">
+                  <span className="text-[color:var(--ks-navy)]">
                     {w.title}
                   </span>
                 </li>
               ))}
             </ol>
-            <p className="mt-4 text-sm leading-relaxed text-[color:var(--bcad-ink-600)]">
+            <p className="mt-4 text-sm leading-relaxed text-[color:var(--ks-ink)]">
               The full curriculum, schedules, and what to expect are on the{" "}
               <Link
                 href="/training"
-                className="font-medium text-[color:var(--bcad-navy-700)] underline-offset-4 hover:underline"
+                className="font-medium text-[color:var(--ks-blue)] underline-offset-4 hover:underline"
               >
                 training page
               </Link>
@@ -98,18 +104,18 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          <div className="rounded-2xl bg-[color:var(--bcad-mist-50)] p-6">
-            <h2 className="font-display text-xl font-semibold text-[color:var(--foreground)]">
+          <div className="bg-[color:var(--ks-soft)] p-6">
+            <h2 className="font-display text-xl font-bold text-[color:var(--ks-navy)]">
               Stuck on the form?
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-[color:var(--bcad-ink-600)]">
+            <p className="mt-2 text-sm leading-relaxed text-[color:var(--ks-ink)]">
               Call or write and we&rsquo;ll register you over the phone.
             </p>
             <ul className="mt-4 space-y-2 text-sm">
               <li>
                 <a
                   href="mailto:training@bcadconsulting.com"
-                  className="font-medium text-[color:var(--bcad-navy-700)] hover:underline"
+                  className="font-medium text-[color:var(--ks-blue)] hover:underline"
                 >
                   training@bcadconsulting.com
                 </a>
@@ -117,7 +123,7 @@ export default function RegisterPage() {
               <li>
                 <a
                   href="tel:+251937933333"
-                  className="font-medium text-[color:var(--bcad-navy-700)] hover:underline"
+                  className="font-medium text-[color:var(--ks-blue)] hover:underline"
                 >
                   +251 093 793 3333
                 </a>
@@ -125,7 +131,7 @@ export default function RegisterPage() {
               <li>
                 <a
                   href="tel:+251937333355"
-                  className="font-medium text-[color:var(--bcad-navy-700)] hover:underline"
+                  className="font-medium text-[color:var(--ks-blue)] hover:underline"
                 >
                   +251 093 733 3355
                 </a>

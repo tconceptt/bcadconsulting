@@ -12,6 +12,9 @@ const NAV_ITEMS = [
   { href: "/contact", label: "Contact" },
 ];
 
+// Mobile menu gets an explicit Home link; on desktop the logo serves that role.
+const MOBILE_NAV_ITEMS = [{ href: "/", label: "Home" }, ...NAV_ITEMS];
+
 export function SiteHeader() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -24,6 +27,11 @@ export function SiteHeader() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [menuOpen]);
+
+  // Collapse the mobile menu on any navigation (link tap, logo, back/forward).
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
 
   return (
     <header
@@ -105,9 +113,12 @@ export function SiteHeader() {
           className="border-t border-[color:var(--ks-line)] bg-white px-4 pb-6 pt-3 md:hidden"
         >
           <ul className="flex flex-col">
-            {NAV_ITEMS.map((item) => {
+            {MOBILE_NAV_ITEMS.map((item) => {
               const active =
-                pathname === item.href || pathname.startsWith(`${item.href}/`);
+                item.href === "/"
+                  ? pathname === "/"
+                  : pathname === item.href ||
+                    pathname.startsWith(`${item.href}/`);
               return (
                 <li key={item.href}>
                   <Link

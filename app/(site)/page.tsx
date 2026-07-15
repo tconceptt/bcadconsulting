@@ -1,6 +1,48 @@
 import Image from "next/image";
 import Link from "next/link";
 import { KeyLineArt } from "../components/KeyLineArt";
+import { PartnersMarquee } from "../components/PartnersMarquee";
+
+// Logos live in /public/Logos. Order interleaves international funders with the
+// regional institutions and enterprises so both marquee rows read as a mix.
+const trustLogos = [
+  { file: "usaid.png", name: "USAID" },
+  { file: "world-bank.png", name: "The World Bank" },
+  { file: "giz.png", name: "GIZ — Deutsche Gesellschaft für Internationale Zusammenarbeit" },
+  { file: "oxfam.png", name: "Oxfam" },
+  { file: "wfp.png", name: "World Food Programme" },
+  { file: "un-women.png", name: "UN Women" },
+  { file: "care.png", name: "CARE" },
+  { file: "itc.png", name: "International Trade Centre" },
+  { file: "snv.png", name: "SNV Netherlands Development Organisation" },
+  { file: "uneca.png", name: "UN Economic Commission for Africa" },
+  { file: "palladium.png", name: "Palladium" },
+  { file: "ipa.png", name: "Innovations for Poverty Action" },
+  { file: "dsw.png", name: "Deutsche Stiftung Weltbevölkerung" },
+  { file: "cnfa.png", name: "CNFA" },
+  { file: "cefe.png", name: "CEFE International" },
+  { file: "valuelinks.png", name: "ValueLinks" },
+  { file: "dvv-international.png", name: "DVV International" },
+  { file: "kuhne-foundation.png", name: "Kühne Foundation" },
+  { file: "ita.png", name: "Italian Trade Agency" },
+  { file: "cde.png", name: "Centre for the Development of Enterprise" },
+  { file: "benefit.png", name: "BENEFIT Partnership" },
+  { file: "iirr.png", name: "International Institute of Rural Reconstruction" },
+  { file: "psi.png", name: "Population Services International" },
+  { file: "dashen-bank.png", name: "Dashen Bank" },
+  { file: "ethiopian-chamber.png", name: "Ethiopian Chamber of Commerce & Sectoral Associations" },
+  { file: "addis-chamber.png", name: "Addis Ababa Chamber of Commerce & Sectoral Associations" },
+  { file: "ccrda.png", name: "Consortium of Christian Relief & Development Associations" },
+  { file: "mowie.png", name: "Ethiopian Ministry of Water, Irrigation & Energy" },
+  { file: "entag.png", name: "Ethiopian-Netherlands Trade for Agricultural Growth" },
+  { file: "kontoor.png", name: "Kontoor Brands" },
+  { file: "childrens-place.png", name: "The Children's Place" },
+  { file: "savio.png", name: "Savio" },
+  { file: "alfa-systems.png", name: "Alfa Systems" },
+  { file: "fadis.png", name: "FADIS Textile Machinery" },
+  { file: "flexi-personnel.png", name: "Flexi Personnel" },
+  { file: "mti-consulting.png", name: "MTI Consulting" },
+];
 
 const practices = [
   {
@@ -256,6 +298,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Partners that trust us — the track record made visible, in motion */}
+      <PartnersMarquee partners={trustLogos} />
 
       {/* Training — drenched in Entrepreneurship Teal, the color earning its name */}
       <section style={{ backgroundColor: "var(--ks-teal)", color: "var(--ks-navy)" }}>

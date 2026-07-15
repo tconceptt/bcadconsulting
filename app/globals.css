@@ -136,9 +136,108 @@ p {
   filter: brightness(1.06);
 }
 
+/* Partners marquee — seamless infinite scroll of two duplicated track halves */
+@keyframes ks-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes ks-marquee-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.ks-marquee {
+  position: relative;
+  overflow: hidden;
+  /* fade the logos in and out at both edges */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
+.ks-marquee-track {
+  display: flex;
+  width: max-content;
+  flex-shrink: 0;
+  align-items: center;
+  animation: ks-marquee var(--ks-marquee-duration, 60s) linear infinite;
+  will-change: transform;
+}
+.ks-marquee-track--reverse {
+  animation-name: ks-marquee-reverse;
+}
+/* Each set holds the full logo list; the track holds two identical sets side by
+   side, so translateX(-50%) advances exactly one set width — a seamless loop. */
+.ks-marquee-set {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+.ks-marquee:hover .ks-marquee-track {
+  animation-play-state: paused;
+}
+.ks-logo {
+  display: flex;
+  height: 3rem;
+  width: auto;
+  flex-shrink: 0;
+  object-fit: contain;
+  /* institutional restraint: mono until you look closer */
+  opacity: 0.72;
+  filter: grayscale(100%);
+  transition: opacity 0.3s, filter 0.3s, transform 0.3s;
+}
+.ks-logo:hover {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.04);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  /* No infinite scroll — wrap the logos into a static, centered grid */
+  .ks-marquee {
+    -webkit-mask-image: none;
+    mask-image: none;
+    overflow: visible;
+  }
+  .ks-marquee-track {
+    animation: none !important;
+    width: 100%;
+  }
+  .ks-marquee-set {
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    gap: 2rem 3rem;
+  }
+  /* the duplicate set is redundant when wrapped — hide it */
+  .ks-marquee-set[data-clone="true"] {
+    display: none;
+  }
+  .ks-logo {
+    opacity: 1;
+    filter: none;
   }
 
   *,

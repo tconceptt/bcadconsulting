@@ -73,10 +73,10 @@ export function RegistrationForm() {
           <p className="mt-6 text-sm text-[color:var(--ks-ink)]">
             Questions?{" "}
             <a
-              href="mailto:training@bcadconsulting.com"
+              href="mailto:info@bcadconsult.com"
               className="font-medium text-[color:var(--ks-blue)] hover:underline"
             >
-              training@bcadconsulting.com
+              info@bcadconsult.com
             </a>
           </p>
         </div>

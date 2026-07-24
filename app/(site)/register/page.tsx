@@ -114,10 +114,10 @@ export default function RegisterPage() {
             <ul className="mt-4 space-y-2 text-sm">
               <li>
                 <a
-                  href="mailto:training@bcadconsulting.com"
+                  href="mailto:info@bcadconsult.com"
                   className="font-medium text-[color:var(--ks-blue)] hover:underline"
                 >
-                  training@bcadconsulting.com
+                  info@bcadconsult.com
                 </a>
               </li>
               <li>
@@ -130,10 +130,10 @@ export default function RegisterPage() {
               </li>
               <li>
                 <a
-                  href="tel:+251937333355"
+                  href="tel:+251937335555"
                   className="font-medium text-[color:var(--ks-blue)] hover:underline"
                 >
-                  +251 093 733 3355
+                  +251 093 733 5555
                 </a>
               </li>
             </ul>

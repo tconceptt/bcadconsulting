@@ -4,7 +4,7 @@ import { ContactForm } from "./ContactForm";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Talk to BCaD Consulting about consulting engagements, training, HR outsourcing, or solar equipment. Offices at Lebu Commercial Center, Addis Ababa.",
+    "Talk to BCaD Consulting about consulting engagements, training, HR outsourcing, or solar equipment. Offices at Serene House, Lebu Musica, Addis Ababa.",
 };
 
 export default function ContactPage() {
@@ -48,29 +48,32 @@ export default function ContactPage() {
             </h2>
             <address className="mt-4 space-y-4 text-sm not-italic leading-relaxed text-[color:var(--ks-ink)]">
               <p>
-                Q. 01, 4th floor, Lebu Commercial Center
+                Gd. Fl. Serene House
                 <br />
-                Woreda 01, Nifas Silk-Lafto
-                <br />
-                P.O. Box 11194, Addis Ababa, Ethiopia
+                Lebu Musica Bet., Addis Ababa, Ethiopia
               </p>
               <p>
                 Tel:{" "}
                 <a
-                  href="tel:+251114712993"
+                  href="tel:+251937933333"
                   className="font-medium text-[color:var(--ks-blue)] hover:underline"
                 >
-                  +251 11 471 2993
+                  +251 093 793 3333
                 </a>
                 <br />
-                Fax: +251 11 471 2994
+                <a
+                  href="tel:+251937335555"
+                  className="font-medium text-[color:var(--ks-blue)] hover:underline"
+                >
+                  +251 093 733 5555
+                </a>
               </p>
               <p>
                 <a
-                  href="mailto:bcadconsulting@gmail.com"
+                  href="mailto:info@bcadconsult.com"
                   className="font-medium text-[color:var(--ks-blue)] hover:underline"
                 >
-                  bcadconsulting@gmail.com
+                  info@bcadconsult.com
                 </a>
               </p>
             </address>
@@ -87,10 +90,10 @@ export default function ContactPage() {
             <ul className="mt-4 space-y-2 text-sm text-[color:var(--ks-ink)]">
               <li>
                 <a
-                  href="mailto:training@bcadconsulting.com"
+                  href="mailto:info@bcadconsult.com"
                   className="font-medium text-[color:var(--ks-blue)] hover:underline"
                 >
-                  training@bcadconsulting.com
+                  info@bcadconsult.com
                 </a>
               </li>
               <li>
@@ -102,10 +105,10 @@ export default function ContactPage() {
                 </a>
                 {" · "}
                 <a
-                  href="tel:+251937333355"
+                  href="tel:+251937335555"
                   className="font-medium text-[color:var(--ks-blue)] hover:underline"
                 >
-                  +251 093 733 3355
+                  +251 093 733 5555
                 </a>
               </li>
             </ul>

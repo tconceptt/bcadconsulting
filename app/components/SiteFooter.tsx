@@ -53,21 +53,25 @@ export function SiteFooter() {
           </p>
           <address className="mt-4 space-y-2.5 text-sm not-italic leading-relaxed text-white/70">
             <p>
-              4th floor, Lebu Commercial Center
+              Gd. Fl. Serene House
               <br />
-              P.O. Box 11194, Addis Ababa, Ethiopia
+              Lebu Musica Bet., Addis Ababa, Ethiopia
             </p>
             <p>
-              <a href="tel:+251114712993" className="transition hover:text-white">
-                +251 11 471 2993
+              <a href="tel:+251937933333" className="transition hover:text-white">
+                +251 093 793 3333
+              </a>
+              <br />
+              <a href="tel:+251937335555" className="transition hover:text-white">
+                +251 093 733 5555
               </a>
             </p>
             <p>
               <a
-                href="mailto:bcadconsulting@gmail.com"
+                href="mailto:info@bcadconsult.com"
                 className="transition hover:text-white"
               >
-                bcadconsulting@gmail.com
+                info@bcadconsult.com
               </a>
             </p>
           </address>

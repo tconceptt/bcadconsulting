@@ -1,5 +1,7 @@
 "use server";
 
+import { Resend } from "resend";
+
 export type RegistrationState = {
   status: "idle" | "success" | "error";
   message: string;
@@ -63,10 +65,68 @@ export async function submitRegistration(
     };
   }
 
-  console.log("[BCaD registration]", {
-    receivedAt: new Date().toISOString(),
-    ...values,
-  });
+  const resend = new Resend(process.env.RESEND_API_KEY);
+
+  const escapeHtml = (value: string) =>
+    value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+
+  const detailRows = REQUIRED_FIELDS.concat(["background"])
+    .map(
+      (field) =>
+        `<tr><td style="padding:4px 12px 4px 0;font-weight:bold;vertical-align:top">${field}</td><td style="padding:4px 0">${escapeHtml(values[field] || "—")}</td></tr>`,
+    )
+    .join("");
+
+  const firstName = values.fullName.split(/\s+/)[0];
+
+  const [internalResult, traineeResult] = await Promise.all([
+    resend.emails.send({
+      from: "BCaD Registrations <noreply@bcadconsult.com>",
+      to: "info@bcadconsult.com",
+      subject: `New registration: ${values.fullName}`,
+      replyTo: values.email,
+      html: `<h2>New training registration</h2>
+<p>A new trainee has registered for Building a Purpose-Driven Business. Details below — reply to this email to reach them directly.</p>
+<table>${detailRows}</table>`,
+    }),
+    resend.emails.send({
+      from: "BCaD Consulting <noreply@bcadconsult.com>",
+      to: values.email,
+      subject: "Your registration is confirmed — Building a Purpose-Driven Business",
+      replyTo: "info@bcadconsult.com",
+      html: `<h2>Welcome aboard, ${escapeHtml(firstName)}!</h2>
+<p>Thank you for registering for <strong>Building a Purpose-Driven Business</strong>, BCaD Consulting's 4-week intensive training for aspiring entrepreneurs.</p>
+<p><strong>What you signed up for:</strong></p>
+<ul>
+  <li>Starts July 6 — 4 weeks, intensive</li>
+  <li>Preferred session: ${escapeHtml(values.session)}</li>
+  <li>Includes coaching, a peer group, and a certificate</li>
+</ul>
+<p><strong>What happens next:</strong> our team will reach out shortly with payment details (the training fee is 20,000 ETB) and everything you need to get started.</p>
+<p>Have a question in the meantime? Just reply to this email and we'll get back to you.</p>
+<p>— The BCaD Consulting team</p>`,
+    }),
+  ]);
+
+  if (internalResult.error) {
+    console.error("[BCaD registration] Resend error:", internalResult.error);
+    return {
+      status: "error",
+      message:
+        "Something went wrong submitting your registration. Please try again or contact us directly.",
+    };
+  }
+
+  if (traineeResult.error) {
+    // Registration reached the team; only the confirmation copy failed.
+    console.error(
+      "[BCaD registration] confirmation email failed:",
+      traineeResult.error,
+    );
+  }
 
   return {
     status: "success",

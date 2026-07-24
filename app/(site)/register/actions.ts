@@ -6,9 +6,11 @@ export type RegistrationState = {
   status: "idle" | "success" | "error";
   message: string;
   fieldErrors?: Partial<Record<RegistrationField, string>>;
+  /** Submitted values, echoed back on error so the form can stay filled. */
+  values?: Partial<Record<RegistrationField, string>>;
 };
 
-type RegistrationField =
+export type RegistrationField =
   | "fullName"
   | "email"
   | "phone"
@@ -17,6 +19,17 @@ type RegistrationField =
   | "businessIdea"
   | "experience"
   | "session";
+
+const ALL_FIELDS: RegistrationField[] = [
+  "fullName",
+  "email",
+  "phone",
+  "city",
+  "background",
+  "businessIdea",
+  "experience",
+  "session",
+];
 
 const REQUIRED_FIELDS: RegistrationField[] = [
   "fullName",
@@ -28,6 +41,43 @@ const REQUIRED_FIELDS: RegistrationField[] = [
   "session",
 ];
 
+const REQUIRED_MESSAGES: Record<RegistrationField, string> = {
+  fullName: "Please enter your full name.",
+  email: "Please enter your email address so we can reach you.",
+  phone: "Please enter a phone number we can call you on.",
+  city: "Please tell us which city you're based in.",
+  background: "",
+  businessIdea:
+    "Please tell us a little about the business idea or industry that interests you.",
+  experience: "Please select the option that best describes your experience.",
+  session: "Please pick the session that works best for you.",
+};
+
+const FIELD_LABELS: Record<RegistrationField, string> = {
+  fullName: "Full name",
+  email: "Email",
+  phone: "Phone",
+  city: "City",
+  background: "Professional background",
+  businessIdea: "Business idea / interest",
+  experience: "Entrepreneurial experience",
+  session: "Preferred session",
+};
+
+const EXPERIENCE_LABELS: Record<string, string> = {
+  "just-an-idea": "Just an idea — exploring",
+  "early-stage": "Early-stage / pre-revenue",
+  running: "Running a business already",
+  returning: "Returning / pivoting",
+};
+
+const SESSION_LABELS: Record<string, string> = {
+  morning: "Morning (8:30 – 12:00)",
+  afternoon: "Afternoon (1:30 – 5:00 pm)",
+  evening: "Evening (6:00 – 8:00 pm)",
+  flexible: "Flexible — happy with any session",
+};
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function submitRegistration(
@@ -35,7 +85,7 @@ export async function submitRegistration(
   formData: FormData,
 ): Promise<RegistrationState> {
   const values = Object.fromEntries(
-    REQUIRED_FIELDS.concat(["background"]).map((field) => [
+    ALL_FIELDS.map((field) => [
       field,
       (formData.get(field) ?? "").toString().trim(),
     ]),
@@ -45,23 +95,30 @@ export async function submitRegistration(
 
   for (const field of REQUIRED_FIELDS) {
     if (!values[field]) {
-      fieldErrors[field] = "This field is required.";
+      fieldErrors[field] = REQUIRED_MESSAGES[field];
     }
   }
 
   if (values.email && !EMAIL_RE.test(values.email)) {
-    fieldErrors.email = "Enter a valid email address.";
+    fieldErrors.email =
+      "That email address doesn't look right — please double-check it.";
   }
 
   if (values.phone && values.phone.replace(/\D/g, "").length < 9) {
-    fieldErrors.phone = "Enter a valid phone number.";
+    fieldErrors.phone =
+      "That phone number looks too short — please double-check it.";
   }
 
-  if (Object.keys(fieldErrors).length > 0) {
+  const errorCount = Object.keys(fieldErrors).length;
+  if (errorCount > 0) {
     return {
       status: "error",
-      message: "Please correct the highlighted fields and try again.",
+      message:
+        errorCount === 1
+          ? "Almost there — one field below needs your attention. Everything else you filled in has been kept."
+          : `Almost there — ${errorCount} fields below need your attention. Everything else you filled in has been kept.`,
       fieldErrors,
+      values,
     };
   }
 
@@ -73,14 +130,64 @@ export async function submitRegistration(
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;");
 
-  const detailRows = REQUIRED_FIELDS.concat(["background"])
-    .map(
-      (field) =>
-        `<tr><td style="padding:4px 12px 4px 0;font-weight:bold;vertical-align:top">${field}</td><td style="padding:4px 0">${escapeHtml(values[field] || "—")}</td></tr>`,
-    )
-    .join("");
-
   const firstName = values.fullName.split(/\s+/)[0];
+  const sessionLabel = SESSION_LABELS[values.session] ?? values.session;
+  const experienceLabel =
+    EXPERIENCE_LABELS[values.experience] ?? values.experience;
+
+  const displayValues: Record<RegistrationField, string> = {
+    ...values,
+    experience: experienceLabel,
+    session: sessionLabel,
+  };
+
+  const cellStyle =
+    "padding:10px 14px;border-bottom:1px solid #e2e8f0;font-size:14px;line-height:1.5;";
+  const internalRows = ALL_FIELDS.map((field) => {
+    const raw = displayValues[field];
+    let valueHtml = raw ? escapeHtml(raw) : '<span style="color:#94a3b8">—</span>';
+    if (field === "email" && raw) {
+      valueHtml = `<a href="mailto:${escapeHtml(raw)}" style="color:#1d4ed8">${escapeHtml(raw)}</a>`;
+    }
+    if (field === "phone" && raw) {
+      valueHtml = `<a href="tel:${escapeHtml(raw.replace(/[^\d+]/g, ""))}" style="color:#1d4ed8">${escapeHtml(raw)}</a>`;
+    }
+    return `<tr>
+      <td style="${cellStyle}background:#f8fafc;font-weight:600;color:#0f172a;width:190px;vertical-align:top;white-space:nowrap">${FIELD_LABELS[field]}</td>
+      <td style="${cellStyle}color:#334155;vertical-align:top">${valueHtml}</td>
+    </tr>`;
+  }).join("");
+
+  const internalHtml = `
+<div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto">
+  <h2 style="margin:0 0 4px;font-size:20px;color:#0f172a">New training registration</h2>
+  <p style="margin:0 0 20px;font-size:14px;color:#64748b">
+    Building a Purpose-Driven Business &middot; submitted via bcadconsult.com.
+    Reply to this email to reach the applicant directly.
+  </p>
+  <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%;border:1px solid #e2e8f0;border-radius:4px">
+    ${internalRows}
+  </table>
+</div>`;
+
+  const traineeHtml = `
+<div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;font-size:15px;line-height:1.6;color:#0f172a">
+  <h2 style="margin:0 0 16px;font-size:20px">Thank you, ${escapeHtml(firstName)} — we've received your registration.</h2>
+  <p style="margin:0 0 16px">
+    You've applied for <strong>Building a Purpose-Driven Business</strong>,
+    BCaD Consulting's 4-week intensive training for aspiring entrepreneurs,
+    with a preference for the <strong>${escapeHtml(sessionLabel.toLowerCase())}</strong> session.
+  </p>
+  <p style="margin:0 0 16px">
+    Our team will review your application, confirm your payment status, and be
+    in touch shortly.
+  </p>
+  <p style="margin:0 0 16px">
+    Have a question in the meantime? Just reply to this email and we'll get
+    back to you.
+  </p>
+  <p style="margin:0;color:#475569">— The BCaD Consulting team</p>
+</div>`;
 
   const [internalResult, traineeResult] = await Promise.all([
     resend.emails.send({
@@ -88,26 +195,14 @@ export async function submitRegistration(
       to: "info@bcadconsult.com",
       subject: `New registration: ${values.fullName}`,
       replyTo: values.email,
-      html: `<h2>New training registration</h2>
-<p>A new trainee has registered for Building a Purpose-Driven Business. Details below — reply to this email to reach them directly.</p>
-<table>${detailRows}</table>`,
+      html: internalHtml,
     }),
     resend.emails.send({
       from: "BCaD Consulting <noreply@bcadconsult.com>",
       to: values.email,
-      subject: "Your registration is confirmed — Building a Purpose-Driven Business",
+      subject: "We've received your registration — Building a Purpose-Driven Business",
       replyTo: "info@bcadconsult.com",
-      html: `<h2>Welcome aboard, ${escapeHtml(firstName)}!</h2>
-<p>Thank you for registering for <strong>Building a Purpose-Driven Business</strong>, BCaD Consulting's 4-week intensive training for aspiring entrepreneurs.</p>
-<p><strong>What you signed up for:</strong></p>
-<ul>
-  <li>Starts July 6 — 4 weeks, intensive</li>
-  <li>Preferred session: ${escapeHtml(values.session)}</li>
-  <li>Includes coaching, a peer group, and a certificate</li>
-</ul>
-<p><strong>What happens next:</strong> our team will reach out shortly with payment details (the training fee is 20,000 ETB) and everything you need to get started.</p>
-<p>Have a question in the meantime? Just reply to this email and we'll get back to you.</p>
-<p>— The BCaD Consulting team</p>`,
+      html: traineeHtml,
     }),
   ]);
 
@@ -116,7 +211,8 @@ export async function submitRegistration(
     return {
       status: "error",
       message:
-        "Something went wrong submitting your registration. Please try again or contact us directly.",
+        "Sorry — we couldn't submit your registration just now. Your answers have been kept, so please try again in a moment. If it keeps failing, email us directly at info@bcadconsult.com.",
+      values,
     };
   }
 
@@ -131,6 +227,6 @@ export async function submitRegistration(
   return {
     status: "success",
     message:
-      "Thank you — your registration has been received. Our team will reach out shortly with payment and onboarding details.",
+      "Thank you — your registration has been received. Our team will review your application, confirm your payment status, and be in touch shortly.",
   };
 }

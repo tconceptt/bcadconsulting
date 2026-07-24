@@ -42,6 +42,7 @@ export function RegistrationForm() {
   const [state, formAction] = useActionState(submitRegistration, initialState);
   const [paymentDismissed, setPaymentDismissed] = useState(false);
   const errors = state.fieldErrors ?? {};
+  const values = state.values ?? {};
   const paymentOpen = state.status === "success" && !paymentDismissed;
 
   if (state.status === "success") {
@@ -89,12 +90,22 @@ export function RegistrationForm() {
 
   return (
     <form action={formAction} className="space-y-5" noValidate>
+      {state.status === "error" && (
+        <p
+          role="alert"
+          className="rounded-[4px] border border-[color:var(--ks-red)]/40 bg-[color:var(--ks-red)]/10 px-4 py-3 text-sm leading-relaxed text-[color:var(--ks-red)]"
+        >
+          {state.message}
+        </p>
+      )}
+
       <div className="grid gap-5 sm:grid-cols-2">
         <Field
           label="Full name"
           name="fullName"
           required
           error={errors.fullName}
+          defaultValue={values.fullName}
           autoComplete="name"
         />
         <Field
@@ -103,6 +114,7 @@ export function RegistrationForm() {
           type="email"
           required
           error={errors.email}
+          defaultValue={values.email}
           autoComplete="email"
         />
         <Field
@@ -111,6 +123,7 @@ export function RegistrationForm() {
           type="tel"
           required
           error={errors.phone}
+          defaultValue={values.phone}
           autoComplete="tel"
           placeholder="+251 9XX XXX XXX"
         />
@@ -119,6 +132,7 @@ export function RegistrationForm() {
           name="city"
           required
           error={errors.city}
+          defaultValue={values.city}
           placeholder="Addis Ababa"
         />
       </div>
@@ -129,6 +143,7 @@ export function RegistrationForm() {
           id="background"
           name="background"
           type="text"
+          defaultValue={values.background}
           placeholder="e.g. University student, NGO staff, shop owner"
           className={fieldClass(false)}
         />
@@ -142,6 +157,8 @@ export function RegistrationForm() {
           id="businessIdea"
           name="businessIdea"
           rows={3}
+          defaultValue={values.businessIdea}
+          aria-invalid={!!errors.businessIdea}
           className={fieldClass(!!errors.businessIdea)}
           placeholder="e.g. agribusiness in Oromia, a coffee export brand, a tech service for SMEs in Addis…"
         />
@@ -155,7 +172,8 @@ export function RegistrationForm() {
         <select
           id="experience"
           name="experience"
-          defaultValue=""
+          defaultValue={values.experience ?? ""}
+          aria-invalid={!!errors.experience}
           className={fieldClass(!!errors.experience)}
         >
           <option value="" disabled>
@@ -179,21 +197,25 @@ export function RegistrationForm() {
             value="morning"
             title="Morning"
             subtitle="8:30 – 12:00"
+            defaultChecked={values.session === "morning"}
           />
           <SessionOption
             value="afternoon"
             title="Afternoon"
             subtitle="1:30 – 5:00 pm"
+            defaultChecked={values.session === "afternoon"}
           />
           <SessionOption
             value="evening"
             title="Evening"
             subtitle="6:00 – 8:00 pm"
+            defaultChecked={values.session === "evening"}
           />
           <SessionOption
             value="flexible"
             title="I'm flexible"
             subtitle="Help me choose a session"
+            defaultChecked={values.session === "flexible"}
           />
         </div>
         <p className="mt-2 text-xs leading-relaxed text-[color:var(--ks-ink)]">
@@ -203,12 +225,6 @@ export function RegistrationForm() {
         </p>
         {errors.session && <ErrorText>{errors.session}</ErrorText>}
       </fieldset>
-
-      {state.status === "error" && (
-        <p className="rounded-[4px] border border-[color:var(--ks-red)]/40 bg-[color:var(--ks-red)]/10 px-4 py-3 text-sm text-[color:var(--ks-red)]">
-          {state.message}
-        </p>
-      )}
 
       <div className="flex flex-col gap-4 border-t border-[color:var(--ks-line)] pt-5 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-[color:var(--ks-ink)]">
@@ -263,6 +279,7 @@ function Field({
   type = "text",
   required,
   error,
+  defaultValue,
   placeholder,
   autoComplete,
 }: {
@@ -271,6 +288,7 @@ function Field({
   type?: string;
   required?: boolean;
   error?: string;
+  defaultValue?: string;
   placeholder?: string;
   autoComplete?: string;
 }) {
@@ -283,8 +301,10 @@ function Field({
         id={name}
         name={name}
         type={type}
+        defaultValue={defaultValue}
         placeholder={placeholder}
         autoComplete={autoComplete}
+        aria-invalid={!!error}
         className={fieldClass(!!error)}
       />
       {error && <ErrorText>{error}</ErrorText>}
@@ -296,10 +316,12 @@ function SessionOption({
   value,
   title,
   subtitle,
+  defaultChecked,
 }: {
   value: string;
   title: string;
   subtitle: string;
+  defaultChecked?: boolean;
 }) {
   return (
     <label className="flex cursor-pointer items-start gap-3 rounded-[4px] border border-[color:var(--ks-line)] bg-white p-4 transition hover:border-[color:var(--ks-blue)]/60 has-[:checked]:border-[color:var(--ks-blue)] has-[:checked]:bg-[color:var(--ks-soft)]">
@@ -307,6 +329,7 @@ function SessionOption({
         type="radio"
         name="session"
         value={value}
+        defaultChecked={defaultChecked}
         className="mt-1 h-4 w-4 accent-[color:var(--ks-blue)]"
       />
       <span className="flex flex-col">

@@ -47,7 +47,7 @@ export default function TrainingPage() {
       >
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <p className="text-sm font-semibold text-[color:var(--ks-gold)]">
-            Now enrolling — starts July 6
+            Now enrolling — starts August 10
           </p>
           <h1 className="mt-3 max-w-3xl font-display text-[clamp(2.2rem,5vw,3.6rem)] font-bold leading-tight tracking-[-0.02em]">
             Building a Purpose-Driven Business
@@ -66,7 +66,7 @@ export default function TrainingPage() {
               Register for the training
             </Link>
             <p className="text-sm text-white/70">
-              20,000 ETB · certificate of completion
+              From 2,000 ETB · certificate of completion
             </p>
           </div>
         </div>

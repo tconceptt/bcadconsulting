@@ -1,6 +1,7 @@
 "use server";
 
 import { Resend } from "resend";
+import { getPackage, TRAINING_PACKAGES } from "./packages";
 
 export type RegistrationState = {
   status: "idle" | "success" | "error";
@@ -18,6 +19,7 @@ export type RegistrationField =
   | "background"
   | "businessIdea"
   | "experience"
+  | "package"
   | "session";
 
 const ALL_FIELDS: RegistrationField[] = [
@@ -28,6 +30,7 @@ const ALL_FIELDS: RegistrationField[] = [
   "background",
   "businessIdea",
   "experience",
+  "package",
   "session",
 ];
 
@@ -38,6 +41,7 @@ const REQUIRED_FIELDS: RegistrationField[] = [
   "city",
   "businessIdea",
   "experience",
+  "package",
   "session",
 ];
 
@@ -50,6 +54,7 @@ const REQUIRED_MESSAGES: Record<RegistrationField, string> = {
   businessIdea:
     "Please tell us a little about the business idea or industry that interests you.",
   experience: "Please select the option that best describes your experience.",
+  package: "Please choose the training package you'd like to join.",
   session: "Please pick the session that works best for you.",
 };
 
@@ -61,8 +66,13 @@ const FIELD_LABELS: Record<RegistrationField, string> = {
   background: "Professional background",
   businessIdea: "Business idea / interest",
   experience: "Entrepreneurial experience",
+  package: "Training package",
   session: "Preferred session",
 };
+
+const PACKAGE_LABELS: Record<string, string> = Object.fromEntries(
+  TRAINING_PACKAGES.map((p) => [p.id, `${p.title} (${p.duration}) — ${p.price}`]),
+);
 
 const EXPERIENCE_LABELS: Record<string, string> = {
   "just-an-idea": "Just an idea — exploring",
@@ -134,10 +144,13 @@ export async function submitRegistration(
   const sessionLabel = SESSION_LABELS[values.session] ?? values.session;
   const experienceLabel =
     EXPERIENCE_LABELS[values.experience] ?? values.experience;
+  const chosenPackage = getPackage(values.package);
+  const packageLabel = PACKAGE_LABELS[values.package] ?? values.package;
 
   const displayValues: Record<RegistrationField, string> = {
     ...values,
     experience: experienceLabel,
+    package: packageLabel,
     session: sessionLabel,
   };
 
@@ -175,8 +188,11 @@ export async function submitRegistration(
   <h2 style="margin:0 0 16px;font-size:20px">Thank you, ${escapeHtml(firstName)} — we've received your registration.</h2>
   <p style="margin:0 0 16px">
     You've applied for <strong>Building a Purpose-Driven Business</strong>,
-    BCaD Consulting's 4-week intensive training for aspiring entrepreneurs,
+    BCaD Consulting's intensive training for aspiring entrepreneurs,
     with a preference for the <strong>${escapeHtml(sessionLabel.toLowerCase())}</strong> session.
+  </p>
+  <p style="margin:0 0 16px">
+    Your selected package: <strong>${escapeHtml(packageLabel)}</strong>.
   </p>
   <p style="margin:0 0 16px">
     Our team will review your application, confirm your payment status, and be
@@ -226,7 +242,9 @@ export async function submitRegistration(
 
   return {
     status: "success",
-    message:
-      "Thank you — your registration has been received. Our team will review your application, confirm your payment status, and be in touch shortly.",
+    message: `Thank you — your registration for the ${
+      chosenPackage ? `${chosenPackage.title.toLowerCase()} (${chosenPackage.duration})` : "training"
+    } has been received. Our team will review your application, confirm your payment status, and be in touch shortly.`,
+    values,
   };
 }

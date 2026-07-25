@@ -7,6 +7,7 @@ import {
   submitRegistration,
   type RegistrationState,
 } from "./actions";
+import { getPackage, TRAINING_PACKAGES } from "./packages";
 
 const initialState: RegistrationState = {
   status: "idle",
@@ -45,6 +46,8 @@ export function RegistrationForm() {
   const values = state.values ?? {};
   const paymentOpen = state.status === "success" && !paymentDismissed;
 
+  const chosenPackage = getPackage(values.package);
+
   if (state.status === "success") {
     return (
       <>
@@ -60,8 +63,10 @@ export function RegistrationForm() {
           </p>
           <p className="mt-4 text-sm leading-relaxed text-[color:var(--ks-navy)]">
             To secure your seat, please complete the{" "}
-            <span className="font-semibold">20,000 ETB</span> training fee via
-            QR payment.
+            <span className="font-semibold">
+              {chosenPackage?.price ?? "training"}
+            </span>{" "}
+            fee via QR payment or bank transfer.
           </p>
           <button
             type="button"
@@ -82,7 +87,11 @@ export function RegistrationForm() {
           </p>
         </div>
         {paymentOpen && (
-          <PaymentModal onClose={() => setPaymentDismissed(true)} />
+          <PaymentModal
+            amount={chosenPackage?.price}
+            packageTitle={chosenPackage?.title}
+            onClose={() => setPaymentDismissed(true)}
+          />
         )}
       </>
     );
@@ -189,6 +198,30 @@ export function RegistrationForm() {
 
       <fieldset>
         <legend className="mb-2 block text-sm font-medium text-[color:var(--ks-navy)]">
+          Training package{" "}
+          <span className="text-[color:var(--ks-gold-deep)]">*</span>
+        </legend>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {TRAINING_PACKAGES.map((p) => (
+            <PackageOption
+              key={p.id}
+              value={p.id}
+              title={p.title}
+              duration={p.duration}
+              price={p.price}
+              defaultChecked={values.package === p.id}
+            />
+          ))}
+        </div>
+        <p className="mt-2 text-xs leading-relaxed text-[color:var(--ks-ink)]">
+          Not sure which package fits? Pick one now and our team can help you
+          switch before the training starts.
+        </p>
+        {errors.package && <ErrorText>{errors.package}</ErrorText>}
+      </fieldset>
+
+      <fieldset>
+        <legend className="mb-2 block text-sm font-medium text-[color:var(--ks-navy)]">
           Preferred session{" "}
           <span className="text-[color:var(--ks-gold-deep)]">*</span>
         </legend>
@@ -230,9 +263,10 @@ export function RegistrationForm() {
         <p className="text-sm text-[color:var(--ks-ink)]">
           Training fee:{" "}
           <span className="font-semibold text-[color:var(--ks-navy)]">
-            20,000 ETB
-          </span>
-          , paid by QR after you submit.
+            2,000 – 20,000 ETB
+          </span>{" "}
+          depending on your package, paid by QR or bank transfer after you
+          submit.
         </p>
         <SubmitButton />
       </div>
@@ -309,6 +343,43 @@ function Field({
       />
       {error && <ErrorText>{error}</ErrorText>}
     </div>
+  );
+}
+
+function PackageOption({
+  value,
+  title,
+  duration,
+  price,
+  defaultChecked,
+}: {
+  value: string;
+  title: string;
+  duration: string;
+  price: string;
+  defaultChecked?: boolean;
+}) {
+  return (
+    <label className="flex cursor-pointer items-start gap-3 rounded-[4px] border border-[color:var(--ks-line)] bg-white p-4 transition hover:border-[color:var(--ks-blue)]/60 has-[:checked]:border-[color:var(--ks-blue)] has-[:checked]:bg-[color:var(--ks-soft)]">
+      <input
+        type="radio"
+        name="package"
+        value={value}
+        defaultChecked={defaultChecked}
+        className="mt-1 h-4 w-4 accent-[color:var(--ks-blue)]"
+      />
+      <span className="flex w-full flex-col">
+        <span className="flex items-baseline justify-between gap-2">
+          <span className="text-sm font-semibold text-[color:var(--ks-navy)]">
+            {title}
+          </span>
+          <span className="text-sm font-bold text-[color:var(--ks-gold-deep)]">
+            {price}
+          </span>
+        </span>
+        <span className="text-xs text-[color:var(--ks-ink)]">{duration}</span>
+      </span>
+    </label>
   );
 }
 

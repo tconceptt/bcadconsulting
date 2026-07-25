@@ -5,20 +5,73 @@ import { useEffect, useState } from "react";
 
 type Bank = "awash" | "cbe";
 
-const BANKS: Record<Bank, { label: string; src: string; alt: string }> = {
+const BANKS: Record<
+  Bank,
+  { label: string; src: string; alt: string; accountNumber: string }
+> = {
   awash: {
     label: "Awash Bank",
     src: "/QR-payment.jpeg",
     alt: "Awash Bank payment QR code for BCaD Consulting training",
+    accountNumber: "013040776952800",
   },
   cbe: {
     label: "CBE",
     src: "/CBE-QR.jpeg",
     alt: "Commercial Bank of Ethiopia payment QR code for BCaD Consulting training",
+    accountNumber: "1000267179062",
   },
 };
 
-export function PaymentModal({ onClose }: { onClose: () => void }) {
+const ACCOUNT_NAME = "BCaD Consulting Management PLC";
+
+function CopyButton({ text, label }: { text: string; label: string }) {
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      // Clipboard API unavailable (e.g. older in-app browsers) — fall back
+      // to a hidden textarea so the copy still works.
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={copy}
+      aria-label={`Copy ${label}`}
+      className={`inline-flex flex-shrink-0 items-center gap-1 rounded-[3px] border px-2.5 py-1 text-xs font-semibold transition ${
+        copied
+          ? "border-[color:var(--ks-gold)] text-[color:var(--ks-gold)]"
+          : "border-white/30 text-white/80 hover:bg-white/10 hover:text-white"
+      }`}
+    >
+      {copied ? "Copied ✓" : "Copy"}
+    </button>
+  );
+}
+
+export function PaymentModal({
+  amount,
+  packageTitle,
+  onClose,
+}: {
+  amount?: string;
+  packageTitle?: string;
+  onClose: () => void;
+}) {
   const [bank, setBank] = useState<Bank>("awash");
 
   useEffect(() => {
@@ -73,9 +126,11 @@ export function PaymentModal({ onClose }: { onClose: () => void }) {
         <div className="mt-6 border border-white/15 p-4">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-sm text-white/60">Training fee</p>
+              <p className="text-sm text-white/60">
+                {packageTitle ? `${packageTitle} fee` : "Training fee"}
+              </p>
               <p className="mt-1 font-display text-2xl font-bold text-[color:var(--ks-gold)]">
-                20,000 ETB
+                {amount ?? "2,000 – 20,000 ETB"}
               </p>
             </div>
             <div className="text-right text-sm text-white/60">
@@ -124,14 +179,44 @@ export function PaymentModal({ onClose }: { onClose: () => void }) {
           />
         </div>
 
-        <div className="mt-6 space-y-3 border border-white/15 p-4 text-sm leading-relaxed text-white/85">
+        <div className="mt-5 border border-white/15 p-4">
+          <p className="text-sm font-semibold text-[color:var(--ks-gold)]">
+            Prefer a direct transfer?
+          </p>
+          <p className="mt-1 text-xs text-white/60">
+            Account name: <span className="text-white/85">{ACCOUNT_NAME}</span>
+          </p>
+          <ul className="mt-3 space-y-2">
+            {(Object.keys(BANKS) as Bank[]).map((key) => (
+              <li
+                key={key}
+                className="flex items-center justify-between gap-3 rounded-[3px] bg-white/5 px-3 py-2.5"
+              >
+                <span className="min-w-0">
+                  <span className="block text-xs text-white/60">
+                    {BANKS[key].label}
+                  </span>
+                  <span className="block truncate font-mono text-sm font-semibold tracking-wide text-white">
+                    {BANKS[key].accountNumber}
+                  </span>
+                </span>
+                <CopyButton
+                  text={BANKS[key].accountNumber}
+                  label={`${BANKS[key].label} account number`}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-5 space-y-3 border border-white/15 p-4 text-sm leading-relaxed text-white/85">
           <p>
             <span className="font-semibold text-[color:var(--ks-gold)]">
               How to pay:
             </span>{" "}
             Open any Ethiopian banking app, choose &ldquo;Scan to Pay&rdquo;,
-            and scan either QR above. Both QRs can be scanned from any banking
-            app to deposit into{" "}
+            and scan either QR above — or transfer directly to one of the
+            account numbers listed. Both routes deposit into{" "}
             <span className="font-semibold text-white">Awash Bank</span> or{" "}
             <span className="font-semibold text-white">CBE</span>.
           </p>

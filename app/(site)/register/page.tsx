@@ -9,11 +9,18 @@ export const metadata: Metadata = {
 };
 
 const facts = [
-  { label: "Starts", value: "July 6" },
-  { label: "Duration", value: "4 weeks, intensive" },
-  { label: "Fee", value: "20,000 ETB" },
+  { label: "Starts", value: "August 10" },
+  { label: "Duration", value: "1 day up to 4 weeks, by package" },
+  { label: "Fee", value: "2,000 – 20,000 ETB" },
   { label: "Sessions", value: "Morning, afternoon, or evening" },
   { label: "Includes", value: "Coaching, peer group, certificate" },
+];
+
+const packages = [
+  { label: "One day", value: "2,000 ETB" },
+  { label: "One week", value: "7,500 ETB" },
+  { label: "Two weeks", value: "12,500 ETB" },
+  { label: "Full package (4 weeks)", value: "20,000 ETB" },
 ];
 
 const weeks = [
@@ -40,9 +47,9 @@ export default function RegisterPage() {
             Reserve your seat.
           </h1>
           <p className="mt-3 max-w-2xl leading-relaxed text-white/80">
-            Registration takes about five minutes. Payment is by QR through any
-            Ethiopian banking app, and our team confirms your seat within 24
-            hours.
+            Registration takes about five minutes. Pay by QR through any
+            Ethiopian banking app or by direct bank transfer, and our team
+            confirms your seat within 24 hours.
           </p>
         </div>
       </section>
@@ -70,6 +77,29 @@ export default function RegisterPage() {
                   </dt>
                   <dd className="text-right text-sm font-medium text-[color:var(--ks-navy)]">
                     {f.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <div>
+            <h2 className="font-display text-xl font-bold text-[color:var(--ks-navy)]">
+              Training packages
+            </h2>
+            <dl className="mt-5">
+              {packages.map((p, i) => (
+                <div
+                  key={p.label}
+                  className={`flex items-baseline justify-between gap-4 py-3 ${
+                    i > 0 ? "border-t border-[color:var(--ks-line)]" : ""
+                  }`}
+                >
+                  <dt className="text-sm text-[color:var(--ks-ink)]">
+                    {p.label}
+                  </dt>
+                  <dd className="text-right text-sm font-medium text-[color:var(--ks-navy)]">
+                    {p.value}
                   </dd>
                 </div>
               ))}

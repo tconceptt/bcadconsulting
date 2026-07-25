@@ -145,7 +145,8 @@ export default function Home() {
           </div>
           <p className="ks-rise ks-rise-4 mt-16 max-w-md text-sm leading-relaxed text-white/55">
             Management consulting · BPO &amp; HR · Renewable energy ·
-            Dietetics — from Addis Ababa, across seven African countries.
+            Dietetics — from Addis Ababa, across every region of Ethiopia and
+            several African countries.
           </p>
         </div>
       </section>
@@ -215,7 +216,7 @@ export default function Home() {
               <p className="mt-5 max-w-md leading-[1.75] text-white/75">
                 When funders need a partner who can reach the last mile —
                 rural energy, women&rsquo;s enterprise, displaced people
-                starting again — they&rsquo;ve called us. For 27 years.
+                starting again — they&rsquo;ve called us. Since 1998.
               </p>
 
               {/* The bow of the key is a real entrepreneur; the shaft is the page */}
@@ -313,7 +314,8 @@ export default function Home() {
               <strong>Building a Purpose-Driven Business</strong> is our
               four-week intensive for aspiring entrepreneurs. Find the idea
               worth your life — and leave with a business plan you can act
-              on. Small cohorts, real coaching, 27 years of method behind it.
+              on. Small cohorts, real coaching, and decades of method behind
+              it.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-4">
               <Link

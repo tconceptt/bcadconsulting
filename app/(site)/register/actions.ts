@@ -132,8 +132,6 @@ export async function submitRegistration(
     };
   }
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
-
   const escapeHtml = (value: string) =>
     value
       .replace(/&/g, "&amp;")
@@ -205,39 +203,42 @@ export async function submitRegistration(
   <p style="margin:0;color:#475569">— The BCaD Consulting team</p>
 </div>`;
 
-  const [internalResult, traineeResult] = await Promise.all([
-    resend.emails.send({
-      from: "BCaD Registrations <noreply@bcadconsult.com>",
-      to: "info@bcadconsult.com",
-      subject: `New registration: ${values.fullName}`,
-      replyTo: values.email,
-      html: internalHtml,
-    }),
-    resend.emails.send({
-      from: "BCaD Consulting <noreply@bcadconsult.com>",
-      to: values.email,
-      subject: "We've received your registration — Building a Purpose-Driven Business",
-      replyTo: "info@bcadconsult.com",
-      html: traineeHtml,
-    }),
-  ]);
+  try {
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    const [internalResult, traineeResult] = await Promise.all([
+      resend.emails.send({
+        from: "BCaD Registrations <noreply@bcadconsult.com>",
+        to: "info@bcadconsult.com",
+        subject: `New registration: ${values.fullName}`,
+        replyTo: values.email,
+        html: internalHtml,
+      }),
+      resend.emails.send({
+        from: "BCaD Consulting <noreply@bcadconsult.com>",
+        to: values.email,
+        subject: "We've received your registration — Building a Purpose-Driven Business",
+        replyTo: "info@bcadconsult.com",
+        html: traineeHtml,
+      }),
+    ]);
 
-  if (internalResult.error) {
-    console.error("[BCaD registration] Resend error:", internalResult.error);
+    if (internalResult.error) throw internalResult.error;
+
+    if (traineeResult.error) {
+      // Registration reached the team; only the confirmation copy failed.
+      console.error(
+        "[BCaD registration] confirmation email failed:",
+        traineeResult.error,
+      );
+    }
+  } catch (error) {
+    console.error("[BCaD registration] Resend error:", error);
     return {
       status: "error",
       message:
         "Sorry — we couldn't submit your registration just now. Your answers have been kept, so please try again in a moment. If it keeps failing, email us directly at info@bcadconsult.com.",
       values,
     };
-  }
-
-  if (traineeResult.error) {
-    // Registration reached the team; only the confirmation copy failed.
-    console.error(
-      "[BCaD registration] confirmation email failed:",
-      traineeResult.error,
-    );
   }
 
   return {

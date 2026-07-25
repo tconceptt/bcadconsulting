@@ -14,7 +14,7 @@ const sourceSans = Source_Sans_3({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.bcadconsulting.com"),
+  metadataBase: new URL("https://www.bcadconsult.com"),
   title: {
     default: "BCaD Consulting Management PLC — Spurring Innovation & Entrepreneurship",
     template: "%s | BCaD Consulting",
@@ -24,6 +24,12 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "BCaD Consulting",
+    title: "BCaD Consulting Management PLC",
+    description:
+      "Management consulting, entrepreneurship training, HR outsourcing, and renewable energy solutions — helping enterprises grow since 1998.",
+  },
+  twitter: {
+    card: "summary_large_image",
     title: "BCaD Consulting Management PLC",
     description:
       "Management consulting, entrepreneurship training, HR outsourcing, and renewable energy solutions — helping enterprises grow since 1998.",

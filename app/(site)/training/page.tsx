@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Training",
   description:
-    "BCaD Consulting's entrepreneurship training: a 4-week intensive program for aspiring entrepreneurs, built on the CEFE methodology and 25+ years of practice.",
+    "BCaD Consulting's entrepreneurship training for aspiring entrepreneurs — packages from one day to four weeks, built on the CEFE methodology and 25+ years of practice.",
 };
 
 const weeks = [

@@ -58,14 +58,14 @@ export default function ContactPage() {
                   href="tel:+251937933333"
                   className="font-medium text-[color:var(--ks-blue)] hover:underline"
                 >
-                  +251 093 793 3333
+                  +251 93 793 3333
                 </a>
                 <br />
                 <a
                   href="tel:+251937335555"
                   className="font-medium text-[color:var(--ks-blue)] hover:underline"
                 >
-                  +251 093 733 5555
+                  +251 93 733 5555
                 </a>
               </p>
               <p>
@@ -101,14 +101,14 @@ export default function ContactPage() {
                   href="tel:+251937933333"
                   className="font-medium text-[color:var(--ks-blue)] hover:underline"
                 >
-                  +251 093 793 3333
+                  +251 93 793 3333
                 </a>
                 {" · "}
                 <a
                   href="tel:+251937335555"
                   className="font-medium text-[color:var(--ks-blue)] hover:underline"
                 >
-                  +251 093 733 5555
+                  +251 93 733 5555
                 </a>
               </li>
             </ul>

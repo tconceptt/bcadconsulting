@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "About us",
   description:
-    "BCaD Consulting Management PLC has worked with Ethiopian entrepreneurs and international development partners since 1998 — from Addis Ababa to six African countries.",
+    "BCaD Consulting Management PLC has worked with Ethiopian entrepreneurs and international development partners since 1998 — from Addis Ababa to several African countries.",
 };
 
 const milestones = [

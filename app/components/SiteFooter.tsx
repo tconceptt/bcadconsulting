@@ -59,11 +59,11 @@ export function SiteFooter() {
             </p>
             <p>
               <a href="tel:+251937933333" className="transition hover:text-white">
-                +251 093 793 3333
+                +251 93 793 3333
               </a>
               <br />
               <a href="tel:+251937335555" className="transition hover:text-white">
-                +251 093 733 5555
+                +251 93 733 5555
               </a>
             </p>
             <p>

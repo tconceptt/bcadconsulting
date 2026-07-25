@@ -86,7 +86,7 @@ export function PartnersMarquee({ partners }: { partners: Partner[] }) {
           </h2>
           <p className="max-w-md text-[color:var(--ks-ink)] sm:text-right">
             Funders, ministries, and enterprises who have put programs in our
-            hands — across seven African countries.
+            hands — across several African countries.
           </p>
         </div>
       </div>

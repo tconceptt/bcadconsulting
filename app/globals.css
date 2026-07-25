@@ -1,4 +1,16 @@
 @import "tailwindcss";
+/* shadcn/ui primitives — variants, keyframes and animation utilities only.
+   Neither file declares global element styles, so the public pages are
+   unaffected; only /admin uses shadcn components. */
+@import "shadcn/tailwind.css";
+@import "tw-animate-css";
+
+/* shadcn components ship `dark:` classes. Tailwind v4 resolves `dark:` via
+   prefers-color-scheme by default, which would half-flip the admin UI to dark
+   styling on a dark-mode OS with no dark token values behind it. Bind the
+   variant to an explicit .dark class instead — which nothing sets, so the
+   dark: rules stay inert. */
+@custom-variant dark (&:is(.dark *));
 
 :root {
   --background: #ffffff;
@@ -16,6 +28,32 @@
   --ks-ink: #3d4e66;         /* body text on white (≥4.5:1) */
   --ks-line: rgba(15, 44, 76, 0.12);  /* hairlines on white */
   --ks-red: #d92f2f;         /* form errors only */
+
+  /* shadcn/ui semantic tokens, mapped onto the brand palette so components
+     come out BCaD navy/blue rather than default neutral. Added alongside the
+     existing --background/--foreground rather than replacing them — those two
+     already carry brand values and are used by the public site. */
+  --card: #ffffff;
+  --card-foreground: var(--ks-navy);
+  --popover: #ffffff;
+  --popover-foreground: var(--ks-navy);
+  --primary: var(--ks-blue);
+  --primary-foreground: #ffffff;
+  --secondary: var(--ks-soft);
+  --secondary-foreground: var(--ks-navy);
+  --muted: var(--ks-soft);
+  --muted-foreground: var(--ks-ink);
+  --accent: var(--ks-soft);
+  --accent-foreground: var(--ks-navy);
+  --destructive: var(--ks-red);
+  --destructive-foreground: #ffffff;
+  --border: var(--ks-line);
+  --input: rgba(15, 44, 76, 0.18);
+  --ring: var(--ks-blue);
+
+  /* Squared-off to match the site's existing 3-4px corners, not shadcn's
+     rounder 0.625rem default. */
+  --radius: 0.375rem;
 }
 
 @theme inline {
@@ -33,6 +71,46 @@
   --color-accent-red: var(--ks-red);
   --font-sans: var(--font-sans-src);
   --font-display: var(--font-display);
+
+  /* Register the shadcn tokens as Tailwind colours (bg-primary, border-border…) */
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* shadcn components use the bare `border` utility and rely on a global
+   `* { border-color: var(--border) }`. Tailwind v4 defaults border-color to
+   currentColor, so without this their borders render navy/black.
+   Scoped to the admin tree on purpose: the public pages have ~24 bare
+   `border` usages that expect the current behaviour. */
+@layer base {
+  .admin-scope,
+  .admin-scope *,
+  .admin-scope *::before,
+  .admin-scope *::after {
+    border-color: var(--border);
+  }
 }
 
 html,

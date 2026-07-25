@@ -1,7 +1,16 @@
 "use server";
 
 import { Resend } from "resend";
-import { getPackage, TRAINING_PACKAGES } from "./packages";
+import { fetchMutation } from "convex/nextjs";
+import { api } from "@/convex/_generated/api";
+import type { Id } from "@/convex/_generated/dataModel";
+import { serverSecret } from "@/app/lib/convexServer";
+import { getPackage } from "./packages";
+import {
+  EXPERIENCE_LABELS,
+  PACKAGE_LABELS,
+  SESSION_LABELS,
+} from "./labels";
 
 export type RegistrationState = {
   status: "idle" | "success" | "error";
@@ -70,24 +79,6 @@ const FIELD_LABELS: Record<RegistrationField, string> = {
   session: "Preferred session",
 };
 
-const PACKAGE_LABELS: Record<string, string> = Object.fromEntries(
-  TRAINING_PACKAGES.map((p) => [p.id, `${p.title} (${p.duration}) — ${p.price}`]),
-);
-
-const EXPERIENCE_LABELS: Record<string, string> = {
-  "just-an-idea": "Just an idea — exploring",
-  "early-stage": "Early-stage / pre-revenue",
-  running: "Running a business already",
-  returning: "Returning / pivoting",
-};
-
-const SESSION_LABELS: Record<string, string> = {
-  morning: "Morning (8:30 – 12:00)",
-  afternoon: "Afternoon (1:30 – 5:00 pm)",
-  evening: "Evening (6:00 – 8:00 pm)",
-  flexible: "Flexible — happy with any session",
-};
-
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function submitRegistration(
@@ -100,6 +91,17 @@ export async function submitRegistration(
       (formData.get(field) ?? "").toString().trim(),
     ]),
   ) as Record<RegistrationField, string>;
+
+  // Honeypot: only a bot fills the visually hidden "website" input. Report
+  // success so it has no signal to adapt to, but store nothing.
+  if ((formData.get("website") ?? "").toString().trim() !== "") {
+    return {
+      status: "success",
+      message:
+        "Thank you — your registration has been received. Our team will review your application, confirm your payment status, and be in touch shortly.",
+      values,
+    };
+  }
 
   const fieldErrors: Partial<Record<RegistrationField, string>> = {};
 
@@ -203,6 +205,45 @@ export async function submitRegistration(
   <p style="margin:0;color:#475569">— The BCaD Consulting team</p>
 </div>`;
 
+  // Save first, email second. Storing the registration is what actually
+  // secures the applicant's place; the emails are notifications about it. If
+  // Resend is down we must not lose the person, so only this step can fail the
+  // submission.
+  let registrationId: Id<"registrations">;
+  try {
+    const result = await fetchMutation(api.registrations.create, {
+      secret: serverSecret(),
+      fullName: values.fullName,
+      email: values.email,
+      phone: values.phone,
+      city: values.city,
+      background: values.background || undefined,
+      businessIdea: values.businessIdea,
+      experience: values.experience,
+      packageId: values.package,
+      sessionPreference: values.session,
+    });
+
+    if (result.status === "rate_limited") {
+      return {
+        status: "error",
+        message:
+          "We've received several registrations from this address already. If that wasn't you, please email us at info@bcadconsult.com and we'll sort it out.",
+        values,
+      };
+    }
+
+    registrationId = result.id;
+  } catch (error) {
+    console.error("[BCaD registration] Convex write failed:", error);
+    return {
+      status: "error",
+      message:
+        "Sorry — we couldn't submit your registration just now. Your answers have been kept, so please try again in a moment. If it keeps failing, email us directly at info@bcadconsult.com.",
+      values,
+    };
+  }
+
   try {
     const resend = new Resend(process.env.RESEND_API_KEY);
     const [internalResult, traineeResult] = await Promise.all([
@@ -222,23 +263,29 @@ export async function submitRegistration(
       }),
     ]);
 
-    if (internalResult.error) throw internalResult.error;
+    if (internalResult.error) {
+      // The team's copy failed, but the registration is safely stored and
+      // will show up at /admin — so this is a logged warning, not a failure.
+      console.error(
+        "[BCaD registration] team notification failed:",
+        internalResult.error,
+      );
+    }
 
     if (traineeResult.error) {
-      // Registration reached the team; only the confirmation copy failed.
       console.error(
         "[BCaD registration] confirmation email failed:",
         traineeResult.error,
       );
+    } else {
+      await fetchMutation(api.registrations.markConfirmationEmailSent, {
+        secret: serverSecret(),
+        id: registrationId,
+      });
     }
   } catch (error) {
+    // Same reasoning: the applicant is registered even if nothing was emailed.
     console.error("[BCaD registration] Resend error:", error);
-    return {
-      status: "error",
-      message:
-        "Sorry — we couldn't submit your registration just now. Your answers have been kept, so please try again in a moment. If it keeps failing, email us directly at info@bcadconsult.com.",
-      values,
-    };
   }
 
   return {

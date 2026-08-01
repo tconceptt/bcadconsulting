@@ -140,7 +140,7 @@ export default function Home() {
               href="/training"
               className="ks-btn border border-white/40 px-8 py-4 font-display text-sm font-semibold text-white hover:bg-white/10"
             >
-              Entrepreneurship training
+              Building a Purpose-Driven Business
             </Link>
           </div>
           <p className="ks-rise ks-rise-4 mt-16 max-w-md text-sm leading-relaxed text-white/55">

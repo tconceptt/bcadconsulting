@@ -62,10 +62,10 @@ export default function ContactPage() {
                 </a>
                 <br />
                 <a
-                  href="tel:+251937335555"
+                  href="tel:+251937333355"
                   className="font-medium text-[color:var(--ks-blue)] hover:underline"
                 >
-                  +251 93 733 5555
+                  +251 93 733 3355
                 </a>
               </p>
               <p>
@@ -105,10 +105,10 @@ export default function ContactPage() {
                 </a>
                 {" · "}
                 <a
-                  href="tel:+251937335555"
+                  href="tel:+251937333355"
                   className="font-medium text-[color:var(--ks-blue)] hover:underline"
                 >
-                  +251 93 733 5555
+                  +251 93 733 3355
                 </a>
               </li>
             </ul>

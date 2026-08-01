@@ -5,7 +5,7 @@ import { RegistrationForm } from "./RegistrationForm";
 export const metadata: Metadata = {
   title: "Register",
   description:
-    "Reserve your seat for BCaD Consulting's intensive entrepreneurship training — packages from one day to four weeks. Discover your purpose, build strategy, and launch with confidence.",
+    "Reserve your seat for Building a Purpose-Driven Business, BCaD Consulting's intensive training — packages from one day to four weeks. Discover your purpose, build strategy, and launch with confidence.",
 };
 
 const facts = [
@@ -160,10 +160,10 @@ export default function RegisterPage() {
               </li>
               <li>
                 <a
-                  href="tel:+251937335555"
+                  href="tel:+251937333355"
                   className="font-medium text-[color:var(--ks-blue)] hover:underline"
                 >
-                  +251 93 733 5555
+                  +251 93 733 3355
                 </a>
               </li>
             </ul>

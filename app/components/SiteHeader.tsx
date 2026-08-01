@@ -41,12 +41,12 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-3 sm:px-6">
         <Link href="/" className="flex min-w-0 items-center">
           <Image
-            src="/bcad-new.jpeg"
+            src="/bcad-newlogo.jpeg"
             alt="BCaD Consulting Management PLC — Spurring Innovation and Entrepreneurship"
-            width={1280}
-            height={700}
+            width={688}
+            height={250}
             priority
-            className="-my-3 h-14 w-auto sm:h-16"
+            className="-my-1 h-12 w-auto sm:h-14"
           />
         </Link>
 

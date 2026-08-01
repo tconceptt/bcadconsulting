@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Training",
   description:
-    "BCaD Consulting's entrepreneurship training for aspiring entrepreneurs — packages from one day to four weeks, built on the CEFE methodology and 25+ years of practice.",
+    "Building a Purpose-Driven Business — BCaD Consulting's training for aspiring entrepreneurs. Packages from one day to four weeks, built on competency-based learning and 25+ years of practice.",
 };
 
 const weeks = [
@@ -79,11 +79,11 @@ export default function TrainingPage() {
               Why train with BCaD?
             </h2>
             <p className="mt-4 leading-[1.75] text-[color:var(--ks-ink)]">
-              Entrepreneurship training is not a side business for us —
-              it&rsquo;s been our core work since 1998. We run programs on the
-              CEFE methodology, developed by GIZ and promoted worldwide by CEFE
-              International, of which we are the partner for Ethiopia and
-              Africa.
+              This training is not a side business for us — it&rsquo;s been our
+              core work since 1998. We run it as competency-based learning
+              (CBL) supported by action learning methods, which is effective in
+              problem solving and focuses on skills, knowledge, and
+              dispositions that are transferable beyond the classroom.
             </p>
             <p className="mt-4 leading-[1.75] text-[color:var(--ks-ink)]">
               Through development programs with partners like USADF, UN Women,
